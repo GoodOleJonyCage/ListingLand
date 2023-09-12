@@ -1,7 +1,7 @@
 import { Counter } from "./components/Counter";
 import { FetchData } from "./components/FetchData";
 import { Home } from "./components/Home";
-import { NewListing } from "./components/NewListing";
+import { NewListingPage } from "./Pages/NewListingPage";
 
 const AppRoutes = [
     {
@@ -18,7 +18,7 @@ const AppRoutes = [
     },
     {
         path: '/newlisting',
-        element: <NewListing />
+        element: <NewListingPage />
     },
 
 ];

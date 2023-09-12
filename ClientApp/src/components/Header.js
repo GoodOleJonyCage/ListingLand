@@ -111,7 +111,7 @@ export const Header = () => {
                                                 <h5 className="title">PROPERTIES LIST</h5>
                                                 <div className="content">
                                                     <ul className="menu-col">
-                                                        <li><a href="listing1.html">Properties List</a></li>
+                                                        <li><a href="/newlisting">New Listing</a></li>
                                                         <li><a href="index7.html">Single Property</a></li>
                                                         <li><a href="listing2.html">Search by City</a></li>
                                                         <li><a href="listing5.html">Search by Category</a></li>

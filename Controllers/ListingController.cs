@@ -76,7 +76,7 @@ namespace ListingLand.Controllers
         {
             var vm = JsonConvert.DeserializeObject<List<ViewModels.Listing>>(param.GetProperty("vm").ToString());
 
-            return View();
+            return Ok(vm);
         }
     }
 }
