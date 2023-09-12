@@ -1,12 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using ListingLand.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace ListingLand.Controllers
 {
     public class ListingController : Controller
     {
-        public ListingController()
+        private ListingLandContext _db;
+        public ListingController(ListingLandContext db)
         {
-
+            _db = db;
 
         }
 
