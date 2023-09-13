@@ -1,23 +1,30 @@
 ﻿namespace ListingLand.ViewModels
 {
-    public class AttributeValue
+     
+    public enum Section
     {
-        public int ID { get; set; }
-        public int AttributeID { get; set; }
-        public string Value { get; set; } = string.Empty;
-        public bool Selected { get;set; }
+          Features = 1,
+          QuickSummary = 2,
+          Description = 3
     }
-    
+    public enum AttributeType
+    {
+        Radio =1 ,
+ 	    IndividualCheckBox = 2,
+        OpenText = 3,
+        CheckBox = 4
+    }
     public class Listing
     {
-        public int AttributeID { get; set; }
-        public string Attributename { get; set; } = string.Empty;
-        public int TypeID { get; set; }
-        public string AttributeType { get; set; } = string.Empty;
-        public int sectionID { get; set; }
-        public string SectionName { get; set; } = string.Empty;
-        public string TextValue { get; set; } = string.Empty;
-        public bool Selected { get; set; }
-        public List<AttributeValue> AttributeValues { get; set; }=new List<AttributeValue>();
+        public string Name { get; set; } = string.Empty;
+        public Location Location { get; set; } = new Location();
+
+        public string NameError { get; set; } = string.Empty;
+        public string LocationError { get; set; } = string.Empty;
+        public string FeatureError { get; set; } = string.Empty;
+        
+        public List<Attribute> Features { get; set; } = new List<Attribute>();
+        public List<Attribute> QuickSummary { get; set; } = new List<Attribute>();
+        public List<Attribute> Description { get; set; } = new List<Attribute>();
     }
 }

@@ -1,1 +1,82 @@
-﻿ 
+﻿.loader-container {
+    color: red;
+    font-weight: bold;
+    text-align: center;
+    text-transform: uppercase;
+    font-size: larger;
+    letter-spacing: 5px;
+}
+
+.listing-textarea-container textarea {
+    width: 100%;
+    padding: 10px 10px;
+}
+
+.listing-checkbox-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+    .listing-checkbox-container span {
+        font-weight: bold;
+    }
+
+.listing-textbox-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+    .listing-textbox-container span {
+        min-width: 100px;
+        font-weight: bold;
+    }
+
+.listing-av-checkbox-container {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+}
+
+.listing-av-item {
+    display: flex;
+    gap: 5px;
+    flex-wrap: wrap;
+    align-items: flex-start;
+}
+
+.listing-av-checkbox-container-heading {
+    /* margin-bottom:8px;*/
+    font-weight: bold;
+}
+
+.listing-av-container {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin-bottom: 15px;
+}
+
+.submit_property .search-propertie-filters{
+    margin-left:15px;
+
+}
+.listing-txt-name{
+    width:100%;
+}
+
+.region-container{
+    margin-bottom:15px;
+}
+
+/*
+MuiOutlinedInput-input
+*/
+
+.MuiAutocomplete-input {
+    height: 30px !important;
+}
