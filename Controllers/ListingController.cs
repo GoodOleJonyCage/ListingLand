@@ -1,4 +1,5 @@
 ﻿using ListingLand.Models;
+using ListingLand.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis;
@@ -20,125 +21,135 @@ namespace ListingLand.Controllers
 
         }
 
+        private ViewModels.Listing InitializeListing()
+        {
+            var listing = new ViewModels.Listing();
+            
+            var lst = new List<ViewModels.Attribute>();
+            
+            #region Features
+            lst = (from a in _db.Attributes
+                   join s in _db.AttributeSections
+                   on a.Id equals s.AttributeId
+                   join t in _db.AttributeTypes on a.Type equals t.Id
+                   join se in _db.Sections on s.SectionId equals se.Id
+                   orderby t.Id
+                   where se.Id == (int)ListingLand.ViewModels.Section.Features
+                   select new ViewModels.Attribute()
+                   {
+                       AttributeID = a.Id,
+                       Attributename = a.Name ?? string.Empty,
+                       TypeID = t.Id,
+                       AttributeType = t.Name ?? string.Empty,
+                       sectionID = se.Id,
+                       SectionName = se.Name ?? string.Empty
+                   })
+                     .ToList();
+
+            //if there are attribute values for that specefic attribute
+            lst.ForEach(attribute =>
+            {
+                attribute.AttributeValues =
+                _db.AttributeValues
+                .Where(a => a.AttributeId == attribute.AttributeID)
+                .Select(a => new ViewModels.AttributeValue()
+                {
+                    ID = a.Id,
+                    AttributeID = a.AttributeId ?? 0,
+                    Value = a.Value ?? string.Empty
+                })
+                .ToList();
+            });
+            listing.Features = lst;
+            #endregion
+
+            #region Quick Summary
+            lst = (from a in _db.Attributes
+                   join s in _db.AttributeSections
+                   on a.Id equals s.AttributeId
+                   join t in _db.AttributeTypes on a.Type equals t.Id
+                   join se in _db.Sections on s.SectionId equals se.Id
+                   orderby t.Id
+                   where se.Id == (int)ListingLand.ViewModels.Section.QuickSummary
+                   select new ViewModels.Attribute()
+                   {
+                       AttributeID = a.Id,
+                       Attributename = a.Name ?? string.Empty,
+                       TypeID = t.Id,
+                       AttributeType = t.Name ?? string.Empty,
+                       sectionID = se.Id,
+                       SectionName = se.Name ?? string.Empty
+                   })
+                     .ToList();
+
+            //if there are attribute values for that specefic attribute
+            lst.ForEach(attribute =>
+            {
+                attribute.AttributeValues =
+                _db.AttributeValues
+                .Where(a => a.AttributeId == attribute.AttributeID)
+                .Select(a => new ViewModels.AttributeValue()
+                {
+                    ID = a.Id,
+                    AttributeID = a.AttributeId ?? 0,
+                    Value = a.Value ?? string.Empty
+                })
+                .ToList();
+            });
+            listing.QuickSummary = lst;
+            #endregion
+
+            #region Quick Description
+            lst = (from a in _db.Attributes
+                   join s in _db.AttributeSections
+                   on a.Id equals s.AttributeId
+                   join t in _db.AttributeTypes on a.Type equals t.Id
+                   join se in _db.Sections on s.SectionId equals se.Id
+                   orderby t.Id
+                   where se.Id == (int)ListingLand.ViewModels.Section.Description
+                   select new ViewModels.Attribute()
+                   {
+                       AttributeID = a.Id,
+                       Attributename = a.Name ?? string.Empty,
+                       TypeID = t.Id,
+                       AttributeType = t.Name ?? string.Empty,
+                       sectionID = se.Id,
+                       SectionName = se.Name ?? string.Empty
+                   })
+                     .ToList();
+
+            //if there are attribute values for that specefic attribute
+            lst.ForEach(attribute =>
+            {
+                attribute.AttributeValues =
+                _db.AttributeValues
+                .Where(a => a.AttributeId == attribute.AttributeID)
+                .Select(a => new ViewModels.AttributeValue()
+                {
+                    ID = a.Id,
+                    AttributeID = a.AttributeId ?? 0,
+                    Value = a.Value ?? string.Empty
+                })
+                .ToList();
+            });
+            listing.Description = lst;
+            #endregion
+
+            return listing;
+        }
+
         [HttpGet]
         [Route("getnewlisting")]
         public IActionResult NewListing()
         {
             var listing = new ViewModels.Listing();
-            var lst = new List<ViewModels.Attribute>();
+            
             try
             {
-                #region Features
-                lst = (from a in _db.Attributes
-                       join s in _db.AttributeSections
-                       on a.Id equals s.AttributeId
-                       join t in _db.AttributeTypes on a.Type equals t.Id
-                       join se in _db.Sections on s.SectionId equals se.Id
-                       orderby t.Id
-                       where se.Id == (int)ListingLand.ViewModels.Section.Features
-                       select new ViewModels.Attribute()
-                       {
-                           AttributeID = a.Id,
-                           Attributename = a.Name ?? string.Empty,
-                           TypeID = t.Id,
-                           AttributeType = t.Name ?? string.Empty,
-                           sectionID = se.Id,
-                           SectionName = se.Name ?? string.Empty
-                       })
-                         .ToList();
-
-                //if there are attribute values for that specefic attribute
-                lst.ForEach(attribute =>
-                {
-                    attribute.AttributeValues =
-                    _db.AttributeValues
-                    .Where(a => a.AttributeId == attribute.AttributeID)
-                    .Select(a => new ViewModels.AttributeValue()
-                    {
-                        ID = a.Id,
-                        AttributeID = a.AttributeId ?? 0,
-                        Value = a.Value ?? string.Empty
-                    })
-                    .ToList();
-                });
-                listing.Features = lst;
-                #endregion 
-
-                #region Quick Summary
-                lst = (from a in _db.Attributes
-                       join s in _db.AttributeSections
-                       on a.Id equals s.AttributeId
-                       join t in _db.AttributeTypes on a.Type equals t.Id
-                       join se in _db.Sections on s.SectionId equals se.Id
-                       orderby t.Id
-                       where se.Id == (int)ListingLand.ViewModels.Section.QuickSummary
-                       select new ViewModels.Attribute()
-                       {
-                           AttributeID = a.Id,
-                           Attributename = a.Name ?? string.Empty,
-                           TypeID = t.Id,
-                           AttributeType = t.Name ?? string.Empty,
-                           sectionID = se.Id,
-                           SectionName = se.Name ?? string.Empty
-                       })
-                         .ToList();
-
-                //if there are attribute values for that specefic attribute
-                lst.ForEach(attribute =>
-                {
-                    attribute.AttributeValues =
-                    _db.AttributeValues
-                    .Where(a => a.AttributeId == attribute.AttributeID)
-                    .Select(a => new ViewModels.AttributeValue()
-                    {
-                        ID = a.Id,
-                        AttributeID = a.AttributeId ?? 0,
-                        Value = a.Value ?? string.Empty
-                    })
-                    .ToList();
-                });
-                listing.QuickSummary = lst;
-                #endregion 
-
-                #region Quick Description
-                lst = (from a in _db.Attributes
-                       join s in _db.AttributeSections
-                       on a.Id equals s.AttributeId
-                       join t in _db.AttributeTypes on a.Type equals t.Id
-                       join se in _db.Sections on s.SectionId equals se.Id
-                       orderby t.Id
-                       where se.Id == (int)ListingLand.ViewModels.Section.Description
-                       select new ViewModels.Attribute()
-                       {
-                           AttributeID = a.Id,
-                           Attributename = a.Name ?? string.Empty,
-                           TypeID = t.Id,
-                           AttributeType = t.Name ?? string.Empty,
-                           sectionID = se.Id,
-                           SectionName = se.Name ?? string.Empty
-                       })
-                         .ToList();
-
-                //if there are attribute values for that specefic attribute
-                lst.ForEach(attribute =>
-                {
-                    attribute.AttributeValues =
-                    _db.AttributeValues
-                    .Where(a => a.AttributeId == attribute.AttributeID)
-                    .Select(a => new ViewModels.AttributeValue()
-                    {
-                        ID = a.Id,
-                        AttributeID = a.AttributeId ?? 0,
-                        Value = a.Value ?? string.Empty
-                    })
-                    .ToList();
-                });
-                listing.Description = lst;
-                #endregion 
+                listing = InitializeListing();
             }
             catch (Exception exc)
             {
-
                 return BadRequest(exc.Message);
             }
 
@@ -151,10 +162,10 @@ namespace ListingLand.Controllers
         {
             var vm = JsonConvert.DeserializeObject<ViewModels.Listing>(param.GetProperty("vm").ToString());
             bool hasErrors = false;
-          
+
             if (vm is not null)
             {
-                //clear erros
+                #region clear errors
                 vm.NameError = vm.FeatureError = vm.LocationError = string.Empty;
                 vm?.QuickSummary.ForEach(a =>
                 {
@@ -169,8 +180,7 @@ namespace ListingLand.Controllers
                     d.ErrorMessage = string.Empty;
                 });
 
-
-                if (string.IsNullOrEmpty(vm.Name))
+                if (string.IsNullOrEmpty(vm?.Name))
                 {
                     hasErrors = true;
                     vm.NameError = "Name Required";
@@ -178,12 +188,15 @@ namespace ListingLand.Controllers
 
                 if (vm.Location.Country.ID == 0 ||
                     vm.Location.Region.ID == 0 ||
-                    vm.Location.City.ID == 0 
+                    vm.Location.City.ID == 0
                     )
                 {
                     hasErrors = true;
                     vm.LocationError = "Location Required";
                 }
+                #endregion
+
+                #region validation
 
                 vm?.QuickSummary.ForEach(a =>
                 {
@@ -231,13 +244,102 @@ namespace ListingLand.Controllers
                         d.ErrorMessage = $"Value required for {d.Attributename}";
                     }
                 });
-            }
 
-            if(!hasErrors)
-            {
-                //save listing
-            }
+                #endregion 
 
+                try
+                {
+                    if (!hasErrors)
+                    {
+                        #region save listing
+                        var newlisting = _db.Listings.Add(new Models.Listing()
+                        {
+                            Name = vm?.Name,
+                            CountryId = vm?.Location.Country.ID,
+                            RegionId = vm?.Location.Region.ID,
+                            CityId = vm?.Location.City.ID,
+                        });
+                        _db.SaveChanges();
+                        #endregion
+
+                        #region save listing attributes
+                        List<ListingAttribute> lstAttrbites = new List<ListingAttribute>();
+
+                        #region Quick Summary
+                        vm?.QuickSummary.ForEach(a =>
+                        {
+                            if (a.TypeID == (int)ViewModels.AttributeType.OpenText)
+                            {
+                                lstAttrbites.Add(new ListingAttribute()
+                                {
+                                    ListingId = newlisting.Entity.Id,
+                                    AttributeId = a.AttributeID,
+                                    ValueText = a.TextValue
+                                });
+                            }
+
+                            if (a.TypeID == (int)ViewModels.AttributeType.CheckBox)
+                            {
+                                if (a.AttributeValues.Count > 0)
+                                {
+                                    a.AttributeValues.Where(at => at.Selected is true).ToList()
+                                    .ForEach(at =>
+                                    {
+                                        lstAttrbites.Add(new ListingAttribute()
+                                        {
+                                            ListingId = newlisting.Entity.Id,
+                                            AttributeId = at.AttributeID,
+                                            AttributeValueId = at.ID
+                                        });
+                                    });
+                                }
+                            }
+                        });
+                        #endregion
+
+                        #region Features
+                        vm?.Features.Where(f => f.Selected is true).ToList()
+                        .ForEach(at =>
+                        {
+                            lstAttrbites.Add(new ListingAttribute()
+                            {
+                                ListingId = newlisting.Entity.Id,
+                                AttributeId = at.AttributeID,
+                            });
+                        });
+                        #endregion
+
+                        #region Descriptions
+                        vm?.Description.ForEach(at =>
+                        {
+                            lstAttrbites.Add(new ListingAttribute()
+                            {
+                                ListingId = newlisting.Entity.Id,
+                                AttributeId = at.AttributeID,
+                                ValueText = at.TextValue
+                            });
+                        });
+                        #endregion
+
+                        _db.ListingAttributes.AddRange(lstAttrbites);
+                        _db.SaveChanges();
+
+                        #endregion 
+
+                        //reinitialize after db save 
+                        vm = InitializeListing();
+                        vm.IsValid = true;
+                    }
+                    else
+                    {
+                        vm.IsValid = false;
+                    }
+                }
+                catch (Exception exc)
+                {
+                    return BadRequest(exc.Message);
+                }
+            }
             return Ok(vm);
         }
     }

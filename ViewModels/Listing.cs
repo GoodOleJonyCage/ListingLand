@@ -19,6 +19,8 @@
         public string Name { get; set; } = string.Empty;
         public Location Location { get; set; } = new Location();
 
+        public bool IsValid { get; set; }
+
         public string NameError { get; set; } = string.Empty;
         public string LocationError { get; set; } = string.Empty;
         public string FeatureError { get; set; } = string.Empty;

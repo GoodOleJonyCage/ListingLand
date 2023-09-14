@@ -80,3 +80,20 @@ MuiOutlinedInput-input
 .MuiAutocomplete-input {
     height: 30px !important;
 }
+
+.listing-created-container{
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+}
+.listing-createdbutton-container{
+    display:flex;
+    justify-content:center;
+    gap:10px;
+}
+.listing-created-successlabel{
+    font-weight:bold;
+    letter-spacing:8px;
+    font-size:xx-large;
+}
