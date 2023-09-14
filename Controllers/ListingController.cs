@@ -21,6 +21,155 @@ namespace ListingLand.Controllers
 
         }
 
+        private ViewModels.Listing LoadListing(int listingId)
+        {
+            var listing = new ViewModels.Listing();
+
+            var lst = new List<ViewModels.Attribute>();
+
+            var listingEntry = (from l in _db.Listings join c in _db.Countries on l.CountryId equals c.Id
+                                join r in _db.Regions on l.RegionId equals r.Id
+                                join ci in _db.Cities on l.CityId equals ci.Id
+                                where l.Id == listingId
+                                select new { l,c,r,ci }).SingleOrDefault();
+
+            if (listingEntry != null)
+            {
+                listing.Name = listingEntry.l.Name;
+                listing.Location.Country.Name = listingEntry.c.Name;
+                listing.Location.Region.Name = listingEntry.r.Name;
+                listing.Location.City.Name = listingEntry.ci.Name;
+            }
+
+            #region Features
+            lst = (from a in _db.Attributes
+                          join s in _db.AttributeSections
+                       on a.Id equals s.AttributeId
+                          join t in _db.AttributeTypes on a.Type equals t.Id
+                          join se in _db.Sections on s.SectionId equals se.Id
+                          join la in _db.ListingAttributes on a.Id equals la.AttributeId
+                          orderby t.Id
+                          where se.Id == (int)ListingLand.ViewModels.Section.Features
+                       &&
+                       la.ListingId == listingId
+                          select new ViewModels.Attribute()
+                          {
+                              AttributeID = a.Id,
+                              Attributename = a.Name ?? string.Empty,
+                              TypeID = t.Id,
+                              AttributeType = t.Name ?? string.Empty,
+                              sectionID = se.Id,
+                              SectionName = se.Name ?? string.Empty,
+                              Selected = true,
+                              TextValue = la.ValueText ?? string.Empty
+                          })
+                        .ToList();
+
+            lst = lst.DistinctBy(a => a.AttributeID).ToList();
+            //if there are attribute values for that specefic attribute
+            lst.ForEach(attribute =>
+            {
+                attribute.AttributeValues = (from a in _db.AttributeValues
+                                             join la in _db.ListingAttributes on a.Id equals la.AttributeValueId
+                                             where la.ListingId == listingId &&
+                                                   a.AttributeId == attribute.AttributeID
+                                             select new ViewModels.AttributeValue()
+                                             {
+                                                 AttributeID = a.AttributeId ?? 0,
+                                                 Value = a.Value ?? string.Empty
+
+                                             }).ToList();
+            });
+            listing.Features = lst;
+            #endregion
+
+            #region Quick Summary
+            lst = (from a in _db.Attributes
+                   join s in _db.AttributeSections
+                   on a.Id equals s.AttributeId
+                   join t in _db.AttributeTypes on a.Type equals t.Id
+                   join se in _db.Sections on s.SectionId equals se.Id
+                   join la in _db.ListingAttributes on a.Id equals la.AttributeId
+                   orderby t.Id
+                   where se.Id == (int)ListingLand.ViewModels.Section.QuickSummary
+                   &&
+                   la.ListingId == listingId 
+                   select new ViewModels.Attribute()
+                   {
+                       AttributeID = a.Id,
+                       Attributename = a.Name ?? string.Empty,
+                       TypeID = t.Id,
+                       AttributeType = t.Name ?? string.Empty,
+                       sectionID = se.Id,
+                       SectionName = se.Name ?? string.Empty,
+                       Selected = true,
+                       TextValue = la.ValueText??string.Empty
+                   })
+                     .ToList();
+           
+            lst = lst.DistinctBy(a => a.AttributeID).ToList();
+            //if there are attribute values for that specefic attribute
+            lst.ForEach(attribute =>
+            {
+                attribute.AttributeValues = (from a in _db.AttributeValues
+                                             join la in _db.ListingAttributes on a.Id equals la.AttributeValueId
+                                             where la.ListingId == listingId &&
+                                                   a.AttributeId == attribute.AttributeID
+                                             select new ViewModels.AttributeValue()
+                                             {
+                                                 AttributeID = a.AttributeId ?? 0,
+                                                 Value = a.Value ?? string.Empty
+
+                                             }).ToList();
+            });
+            listing.QuickSummary = lst;
+            #endregion
+
+            #region Quick Description
+            lst = (from a in _db.Attributes
+                   join s in _db.AttributeSections
+                   on a.Id equals s.AttributeId
+                   join t in _db.AttributeTypes on a.Type equals t.Id
+                   join se in _db.Sections on s.SectionId equals se.Id
+                   join la in _db.ListingAttributes on a.Id equals la.AttributeId
+                   orderby t.Id
+                   where se.Id == (int)ListingLand.ViewModels.Section.Description
+                   &&
+                   la.ListingId == listingId
+                   select new ViewModels.Attribute()
+                   {
+                       AttributeID = a.Id,
+                       Attributename = a.Name ?? string.Empty,
+                       TypeID = t.Id,
+                       AttributeType = t.Name ?? string.Empty,
+                       sectionID = se.Id,
+                       SectionName = se.Name ?? string.Empty,
+                       Selected = true,
+                       TextValue = la.ValueText ?? string.Empty
+                   })
+                     .ToList();
+           
+            lst = lst.DistinctBy(a => a.AttributeID).ToList();
+            //if there are attribute values for that specefic attribute
+            lst.ForEach(attribute =>
+            {
+                attribute.AttributeValues = (from a in _db.AttributeValues
+                                             join la in _db.ListingAttributes on a.Id equals la.AttributeValueId
+                                             where la.ListingId == listingId &&
+                                                   a.AttributeId == attribute.AttributeID 
+                                             select new ViewModels.AttributeValue()
+                                             {
+                                                 AttributeID = a.AttributeId ?? 0,
+                                                 Value = a.Value ?? string.Empty
+
+                                             }).ToList();
+            });
+            listing.Description = lst;
+            #endregion
+
+            return listing;
+        }
+
         private ViewModels.Listing InitializeListing()
         {
             var listing = new ViewModels.Listing();
@@ -342,5 +491,25 @@ namespace ListingLand.Controllers
             }
             return Ok(vm);
         }
+
+        [HttpPost]
+        [Route("getlisting")]
+        public IActionResult GetListing([FromBody] System.Text.Json.JsonElement param)
+        {
+            int listingId = Int32.Parse(param.GetProperty("listingid").ToString());
+            var listing = new ViewModels.Listing();
+
+            try
+            {
+                listing = LoadListing(listingId);
+            }
+            catch (Exception exc)
+            {
+                return BadRequest(exc.Message);
+            }
+
+            return Ok(listing);
+        }
+        
     }
 }

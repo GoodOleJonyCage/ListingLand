@@ -59,6 +59,7 @@
     flex-direction: column;
     gap: 5px;
     margin-bottom: 15px;
+    margin-top:15px;
 }
 
 .submit_property .search-propertie-filters{
@@ -96,4 +97,12 @@ MuiOutlinedInput-input
     font-weight:bold;
     letter-spacing:8px;
     font-size:xx-large;
+}
+
+.search-form-group,
+.MuiInputLabel-root,
+.MuiButtonBase-root,
+.MuiOutlinedInput-input,
+.MuiAutocomplete-option {
+    font-size: 12px !important;
 }
