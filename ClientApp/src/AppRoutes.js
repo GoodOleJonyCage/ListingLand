@@ -3,6 +3,7 @@ import { FetchData } from "./components/FetchData";
 import { Home } from "./components/Home";
 import { NewListingPage } from "./Pages/NewListingPage";
 import { ViewListingPage } from "./Pages/ViewListingPage";
+import { ViewListingsPage } from "./Pages/ViewListingsPage";
 
 const AppRoutes = [
     {
@@ -25,7 +26,10 @@ const AppRoutes = [
         path: '/viewlisting',
         element: <ViewListingPage />
     },
-    
+    {
+        path: '/viewlistings',
+        element: <ViewListingsPage />
+    },    
 
 ];
 

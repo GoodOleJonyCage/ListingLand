@@ -1,6 +1,9 @@
 ﻿import { useEffect } from 'react'
+//import { useNavigate } from 'react-router-dom';
 
 export const Header = () => {
+
+    //const navigate = useNavigate();
 
     useEffect(() => {
          
@@ -112,7 +115,7 @@ export const Header = () => {
                                                 <div className="content">
                                                     <ul className="menu-col">
                                                         <li><a href="/newlisting">New Listing</a></li>
-                                                        <li><a href="index7.html">Single Property</a></li>
+                                                        <li><a href="/viewlistings">View Listings</a></li>
                                                         <li><a href="listing2.html">Search by City</a></li>
                                                         <li><a href="listing5.html">Search by Category</a></li>
                                                         <li><a href="listing3.html">Search by Type</a></li>
