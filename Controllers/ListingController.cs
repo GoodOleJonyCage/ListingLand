@@ -39,6 +39,14 @@ namespace ListingLand.Controllers
                 listing.Location.Country.Name = listingEntry.c.Name;
                 listing.Location.Region.Name = listingEntry.r.Name;
                 listing.Location.City.Name = listingEntry.ci.Name;
+                listing.Price = listingEntry.l.Price??0;
+                listing.Area = listingEntry.l.Area ?? 0;
+                listing.Bedrooms = listingEntry.l.Bedrooms ?? 0;
+                listing.Bathrooms = listingEntry.l.Bathrooms ?? 0;
+                listing.OfficeRooms = listingEntry.l.OfficeRooms ?? 0;
+                listing.Garages = listingEntry.l.Garages ?? 0;
+                listing.Backyard = listingEntry.l.Backyard??false;
+                listing.Frontyard = listingEntry.l.Frontyard ?? false;
             }
 
             #region Features
@@ -316,6 +324,15 @@ namespace ListingLand.Controllers
             {
                 #region clear errors
                 vm.NameError = vm.FeatureError = vm.LocationError = string.Empty;
+                vm.PriceError = string.Empty;
+                vm.AreaError = string.Empty;
+                vm.BedroomsError = string.Empty;
+                vm.BathroomsError = string.Empty;
+                vm.OfficeRoomsError = string.Empty;
+                vm.GaragesError = string.Empty;
+                vm.BackyardError = string.Empty;
+                vm.FrontyardError   = string.Empty;
+
                 vm?.QuickSummary.ForEach(a =>
                 {
                     a.ErrorMessage = string.Empty;
@@ -329,6 +346,9 @@ namespace ListingLand.Controllers
                     d.ErrorMessage = string.Empty;
                 });
 
+                #endregion
+
+                #region validation
                 if (string.IsNullOrEmpty(vm?.Name))
                 {
                     hasErrors = true;
@@ -343,10 +363,37 @@ namespace ListingLand.Controllers
                     hasErrors = true;
                     vm.LocationError = "Location Required";
                 }
-                #endregion
-
-                #region validation
-
+                if (vm.Price  == 0)
+                {
+                    hasErrors = true;
+                    vm.PriceError = "Value required for Price";
+                }
+                if (vm.Area == 0)
+                {
+                    hasErrors = true;
+                    vm.AreaError = "Value required for Area";
+                }
+                if (vm.Bedrooms == 0)
+                {
+                    hasErrors = true;
+                    vm.BedroomsError = "Value required for Bedrooms";
+                }
+                if (vm.Bathrooms == 0)
+                {
+                    hasErrors = true;
+                    vm.BathroomsError = "Value required for Bathrooms";
+                }
+                if (vm.OfficeRooms == 0)
+                {
+                    hasErrors = true;
+                    vm.OfficeRoomsError = "Value required for OfficeRooms";
+                }
+                if (vm.Garages == 0)
+                {
+                    hasErrors = true;
+                    vm.GaragesError = "Value required for Garages";
+                }
+           
                 vm?.QuickSummary.ForEach(a =>
                 {
                     if (a.TypeID == (int)ViewModels.AttributeType.OpenText &&
@@ -407,6 +454,14 @@ namespace ListingLand.Controllers
                             CountryId = vm?.Location.Country.ID,
                             RegionId = vm?.Location.Region.ID,
                             CityId = vm?.Location.City.ID,
+                            Price = vm?.Price,
+                            Area = vm?.Area,
+                            Bedrooms = vm?.Bedrooms,
+                            Bathrooms = vm?.Bathrooms,
+                            OfficeRooms = vm?.OfficeRooms,
+                            Garages = vm?.Garages,
+                            Backyard = vm?.Backyard,
+                            Frontyard = vm?.Frontyard
                         });
                         _db.SaveChanges();
                         #endregion

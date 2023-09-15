@@ -33,19 +33,115 @@ export const ViewListing = (props) => {
                                     <div className="row">
                                         <div className="col-sm-6">
                                             <div className=" white">
-                                                <span>Name</span>
+                                                <label>Name</label>
                                             </div>
                                         </div>
                                         <div className="col-sm-6">
                                             <div className=" white">
-                                                <label>{vm.name}</label>
+                                                <span>{vm.name}</span>
                                             </div>
                                         </div>
                                     </div>
                                     <div className="row">
                                         <div className="col-sm-6">
                                             <div className=" white">
-                                                <span>Location</span>
+                                                <label>Price</label>
+                                            </div>
+                                        </div>
+                                        <div className="col-sm-6">
+                                            <div className="newlisting-container white">
+                                                <span>{vm.price}</span> <span className="small">$</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="row">
+                                        <div className="col-sm-6">
+                                            <div className=" white">
+                                                <label>Area</label>
+                                            </div>
+                                        </div>
+                                        <div className="col-sm-6">
+                                            <div className="newlisting-container white">
+                                                <span>{vm.area}</span> <span className="small">Square feet</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="row">
+                                        <div className="col-sm-6">
+                                            <div className=" white">
+                                                <label>Bedrooms</label>
+                                            </div>
+                                        </div>
+                                        <div className="col-sm-6">
+                                            <div className=" white">
+                                                <span>{vm.bedrooms}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="row">
+                                        <div className="col-sm-6">
+                                            <div className=" white">
+                                                <label>Bathrooms</label>
+                                            </div>
+                                        </div>
+                                        <div className="col-sm-6">
+                                            <div className=" white">
+                                                <span>{vm.bathrooms}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="row">
+                                        <div className="col-sm-6">
+                                            <div className=" white">
+                                                <label>Office Rooms</label>
+                                            </div>
+                                        </div>
+                                        <div className="col-sm-6">
+                                            <div className=" white">
+                                                <span>{vm.officeRooms}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="row">
+                                        <div className="col-sm-6">
+                                            <div className=" white">
+                                                <label>Garages</label>
+                                            </div>
+                                        </div>
+                                        <div className="col-sm-6">
+                                            <div className=" white">
+                                                <span>{vm.garages}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="row">
+                                        <div className="col-sm-6">
+                                            <div className=" white">
+                                                <label>Backyard</label>
+                                            </div>
+                                        </div>
+                                        <div className="col-sm-6">
+                                            <div className=" white">
+                                                <span>{vm.backyard ? "Yes" : "No"}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="row">
+                                        <div className="col-sm-6">
+                                            <div className=" white">
+                                                <label>Frontyard</label>
+                                            </div>
+                                        </div>
+                                        <div className="col-sm-6">
+                                            <div className=" white">
+                                                <span>{vm.frontyard ? "Yes" : "No"}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="row">
+                                        <div className="col-sm-6">
+                                            <div className=" white">
+                                                <label>Location</label>
                                             </div>
                                         </div>
                                         <div className="col-sm-6">

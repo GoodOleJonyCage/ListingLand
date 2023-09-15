@@ -107,16 +107,14 @@ export const NewListing = () => {
                                             </div>
                                         </div>
                                         :
-
                                         <div className="row">
                                             <div className="col-sm-12">
-                                                <h3 className="bottom15 margin40">Property Location</h3>
                                                 <div className="search-propertie-filters">
                                                     <div className="container-2">
                                                         <div className="row">
                                                             <div className="col-sm-6">
                                                                 <div className="search-form-group white">
-                                                                    <span>Name</span>
+                                                                    <label>Name</label>
                                                                     <div className="text-danger">{vm.nameError}</div>
                                                                 </div>
                                                             </div>
@@ -130,10 +128,154 @@ export const NewListing = () => {
                                                                 </div>
                                                             </div>
                                                         </div>
+
                                                         <div className="row">
                                                             <div className="col-sm-6">
                                                                 <div className="search-form-group white">
-                                                                    <span>Location</span>
+                                                                    <label>Price</label>
+                                                                    <div className="text-danger">{vm.priceError}</div>
+                                                                </div>
+                                                            </div>
+                                                            <div className="col-sm-6">
+                                                                <div className="search-form-group newlisting-container white">
+                                                                    <input
+                                                                        onChange={(e) => {
+                                                                            vm.price = e.target.value;
+                                                                        }}
+                                                                        type="textbox" className="listing-txt-name" />$
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div className="row">
+                                                            <div className="col-sm-6">
+                                                                <div className="search-form-group white">
+                                                                    <label>Area</label>
+                                                                    <div className="text-danger">{vm.areaError}</div>
+                                                                </div>
+                                                            </div>
+                                                            <div className="col-sm-6">
+                                                                <div className="search-form-group newlisting-container white">
+                                                                    <input
+                                                                        onChange={(e) => {
+                                                                            vm.area = e.target.value;
+                                                                        }}
+                                                                        type="textbox" className="listing-txt-name" />Sqaure Feet 
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div className="row">
+                                                            <div className="col-sm-6">
+                                                                <div className="search-form-group white">
+                                                                    <label>Bedrooms</label>
+                                                                    <div className="text-danger">{vm.bedroomsError}</div>
+                                                                </div>
+                                                            </div>
+                                                            <div className="col-sm-6">
+                                                                <div className="search-form-group white">
+                                                                    <input
+                                                                        onChange={(e) => {
+                                                                            vm.bedrooms = e.target.value;
+                                                                        }}
+                                                                        type="textbox" className="listing-txt-name" />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div className="row">
+                                                            <div className="col-sm-6">
+                                                                <div className="search-form-group white">
+                                                                    <label>Bathrooms</label>
+                                                                    <div className="text-danger">{vm.bathroomsError}</div>
+                                                                </div>
+                                                            </div>
+                                                            <div className="col-sm-6">
+                                                                <div className="search-form-group white">
+                                                                    <input
+                                                                        onChange={(e) => {
+                                                                            vm.bathrooms = e.target.value;
+                                                                        }}
+                                                                        type="textbox" className="listing-txt-name" />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div className="row">
+                                                            <div className="col-sm-6">
+                                                                <div className="search-form-group white">
+                                                                    <label>Office Rooms</label>
+                                                                    <div className="text-danger">{vm.officeRoomsError}</div>
+                                                                </div>
+                                                            </div>
+                                                            <div className="col-sm-6">
+                                                                <div className="search-form-group white">
+                                                                    <input
+                                                                        onChange={(e) => {
+                                                                            vm.officeRooms = e.target.value;
+                                                                        }}
+                                                                        type="textbox" className="listing-txt-name" />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div className="row">
+                                                            <div className="col-sm-6">
+                                                                <div className="search-form-group white">
+                                                                    <label>Garages</label>
+                                                                    <div className="text-danger">{vm.garagesError}</div>
+                                                                </div>
+                                                            </div>
+                                                            <div className="col-sm-6">
+                                                                <div className="search-form-group white">
+                                                                    <input
+                                                                        onChange={(e) => {
+                                                                            vm.garages = e.target.value;
+                                                                        }}
+                                                                        type="textbox" className="listing-txt-name" />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div className="row">
+                                                            <div className="col-sm-6">
+                                                                <div className="search-form-group white">
+                                                                    <label>Backyard</label>
+                                                                    <div className="text-danger">{vm.backyardError}</div>
+                                                                </div>
+                                                            </div>
+                                                            <div className="col-sm-6">
+                                                                <div className="search-form-group white">
+                                                                    <select
+                                                                        defaultValue={vm.frontyard}
+                                                                        onChange={(e) => {
+                                                                            vm.backyard = e.target.value === "1" ? true:false;
+                                                                        }}>
+                                                                        <option value="0">No</option>
+                                                                        <option value="1">Yes</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div className="row">
+                                                            <div className="col-sm-6">
+                                                                <div className="search-form-group white">
+                                                                    <label>Frontyard</label>
+                                                                    <div className="text-danger">{vm.frontyardError}</div>
+                                                                </div>
+                                                            </div>
+                                                            <div className="col-sm-6">
+                                                                <div className="search-form-group white">
+                                                                    <select
+                                                                        defaultValue={vm.frontyard}
+                                                                        onChange={(e) => {
+                                                                            vm.frontyard = e.target.value === "1" ? true : false;
+                                                                        }}>
+                                                                        <option value="0">No</option>
+                                                                        <option value="1">Yes</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div className="row">
+                                                            <div className="col-sm-6">
+                                                                <div className="search-form-group white">
+                                                                    <label>Location</label>
                                                                     <div className="text-danger">{vm.locationError}</div>
                                                                 </div>
                                                             </div>
