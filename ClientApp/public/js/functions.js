@@ -223,7 +223,8 @@ jQuery(function($) {
   
   //Property Details
   var sync1 = $("#property-d-1");
-  var sync2 = $("#property-d-1-2");
+    var sync2 = $("#property-d-1-2");
+    var sync3 = $("#div-similar-properties");
   sync1.owlCarousel({
     autoPlay: 3000,
     singleItem: true,
@@ -248,6 +249,19 @@ jQuery(function($) {
       el.find(".owl-item").eq(0).addClass("synced");
     }
   });
+    sync3.owlCarousel({
+        autoPlay: true,
+        items: 5,
+        itemsDesktop: [1199, 10],
+        itemsDesktopSmall: [979, 10],
+        itemsTablet: [768, 8],
+        itemsMobile: [479, 4],
+        pagination: true,
+        responsiveRefreshRate: 100,
+        afterInit: function (el) {
+            el.find(".owl-item").eq(0).addClass("synced");
+        }
+    });
 
   function syncPosition(el) {
     var current = this.currentItem;

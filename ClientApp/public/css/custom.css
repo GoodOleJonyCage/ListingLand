@@ -157,3 +157,14 @@ MuiOutlinedInput-input
     height:220px;
     width:220px;
 }
+
+.pro-list  {
+    display:flex;
+    flex-direction:row;
+    flex-wrap:wrap;
+    align-items:center;
+}
+
+.property-details .pro-list > li {
+    padding: 10px 60px 0px 2px;
+}
