@@ -31,6 +31,8 @@ public partial class ListingLandContext : DbContext
 
     public virtual DbSet<ListingAttribute> ListingAttributes { get; set; }
 
+    public virtual DbSet<ListingPic> ListingPics { get; set; }
+
     public virtual DbSet<Region> Regions { get; set; }
 
     public virtual DbSet<Section> Sections { get; set; }
@@ -174,6 +176,18 @@ public partial class ListingLandContext : DbContext
             entity.HasOne(d => d.Listing).WithMany(p => p.ListingAttributes)
                 .HasForeignKey(d => d.ListingId)
                 .HasConstraintName("FK_ListingAttribute_Listing");
+        });
+
+        modelBuilder.Entity<ListingPic>(entity =>
+        {
+            entity.ToTable("ListingPic");
+
+            entity.Property(e => e.Id).HasColumnName("ID");
+            entity.Property(e => e.ListingId).HasColumnName("ListingID");
+
+            entity.HasOne(d => d.Listing).WithMany(p => p.ListingPics)
+                .HasForeignKey(d => d.ListingId)
+                .HasConstraintName("FK_ListingPic_Listing");
         });
 
         modelBuilder.Entity<Region>(entity =>

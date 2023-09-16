@@ -32,4 +32,6 @@ public partial class Listing
     public bool? Frontyard { get; set; }
 
     public virtual ICollection<ListingAttribute> ListingAttributes { get; set; } = new List<ListingAttribute>();
+
+    public virtual ICollection<ListingPic> ListingPics { get; set; } = new List<ListingPic>();
 }

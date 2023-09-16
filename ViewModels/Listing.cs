@@ -16,14 +16,15 @@
     }
     public class Listing
     {
+        public int ListingID { get; set; }
         public string Name { get; set; } = string.Empty;
         public Location Location { get; set; } = new Location();
-        public int Price { get; set; }
-        public int Area { get; set; }
-        public int Bedrooms { get; set; }
-        public int Bathrooms { get; set; }
-        public int OfficeRooms { get; set; }
-        public int Garages { get; set; }
+        public string Price { get; set; }
+        public string Area { get; set; }
+        public string Bedrooms { get; set; }
+        public string Bathrooms { get; set; }
+        public string OfficeRooms { get; set; }
+        public string Garages { get; set; }
         public bool Backyard { get; set; }
         public bool Frontyard { get; set; }
 

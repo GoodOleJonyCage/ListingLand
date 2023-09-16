@@ -123,3 +123,25 @@ MuiOutlinedInput-input
 .newlisting-container input[type=text]{
      max-width:150px !important;
 }
+
+.uploader-button-container{
+    display:flex;
+    justify-content:space-between;
+}
+
+.upload-container .img-container{
+    margin-top:10px;
+}
+.upload-container img {
+    height: 200px;
+    width: 200px;
+}
+
+.highlight-error {
+    color: red;
+    text-align: center;
+    font-weight: bold;
+    letter-spacing: 2px;
+    font-size: larger;
+}
+

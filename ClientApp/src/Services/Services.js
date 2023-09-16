@@ -1,4 +1,19 @@
 ﻿
+export const UploadFiles = async (data) => {
+
+    let response = await fetch(`listing/uploadfiles`, {
+        //headers: {
+        //    "Content-Type": "multipart/form-data"
+        //},
+        method: 'POST',
+        body: data
+    });
+    if (response.ok) {
+        return true;
+    }
+    throw response;
+}
+
 export const LoadCountries = async () => {
 
     let response = await fetch(`geo/countries`, {

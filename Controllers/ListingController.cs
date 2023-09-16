@@ -1,4 +1,5 @@
-﻿using ListingLand.Models;
+﻿using ListingLand.Helpers;
+using ListingLand.Models;
 using ListingLand.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -39,12 +40,12 @@ namespace ListingLand.Controllers
                 listing.Location.Country.Name = listingEntry.c.Name;
                 listing.Location.Region.Name = listingEntry.r.Name;
                 listing.Location.City.Name = listingEntry.ci.Name;
-                listing.Price = listingEntry.l.Price??0;
-                listing.Area = listingEntry.l.Area ?? 0;
-                listing.Bedrooms = listingEntry.l.Bedrooms ?? 0;
-                listing.Bathrooms = listingEntry.l.Bathrooms ?? 0;
-                listing.OfficeRooms = listingEntry.l.OfficeRooms ?? 0;
-                listing.Garages = listingEntry.l.Garages ?? 0;
+                listing.Price = (listingEntry.l.Price??0).ToString();
+                listing.Area = (listingEntry.l.Area ?? 0).ToString();
+                listing.Bedrooms = (listingEntry.l.Bedrooms ?? 0).ToString();
+                listing.Bathrooms = ((listingEntry.l.Bathrooms ?? 0).ToString());
+                listing.OfficeRooms = (listingEntry.l.OfficeRooms ?? 0).ToString();
+                listing.Garages = (listingEntry.l.Garages ?? 0).ToString();
                 listing.Backyard = listingEntry.l.Backyard??false;
                 listing.Frontyard = listingEntry.l.Frontyard ?? false;
             }
@@ -363,32 +364,33 @@ namespace ListingLand.Controllers
                     hasErrors = true;
                     vm.LocationError = "Location Required";
                 }
-                if (vm.Price  == 0)
+                int result = 0;
+                if (string.IsNullOrEmpty(vm.Price) || !Int32.TryParse(vm.Price, out result))
                 {
                     hasErrors = true;
                     vm.PriceError = "Value required for Price";
                 }
-                if (vm.Area == 0)
+                if (string.IsNullOrEmpty(vm.Area) || !Int32.TryParse(vm.Area, out result) )
                 {
                     hasErrors = true;
                     vm.AreaError = "Value required for Area";
                 }
-                if (vm.Bedrooms == 0)
+                if (string.IsNullOrEmpty(vm.Bedrooms) || !Int32.TryParse(vm.Bedrooms, out result))
                 {
                     hasErrors = true;
                     vm.BedroomsError = "Value required for Bedrooms";
                 }
-                if (vm.Bathrooms == 0)
+                if (string.IsNullOrEmpty(vm.Bathrooms) || !Int32.TryParse(vm.Bathrooms, out result))
                 {
                     hasErrors = true;
                     vm.BathroomsError = "Value required for Bathrooms";
                 }
-                if (vm.OfficeRooms == 0)
+                if (string.IsNullOrEmpty(vm.OfficeRooms) || !Int32.TryParse(vm.OfficeRooms, out result))
                 {
                     hasErrors = true;
                     vm.OfficeRoomsError = "Value required for OfficeRooms";
                 }
-                if (vm.Garages == 0)
+                if (string.IsNullOrEmpty(vm.Garages) || !Int32.TryParse(vm.Garages, out result))
                 {
                     hasErrors = true;
                     vm.GaragesError = "Value required for Garages";
@@ -454,12 +456,12 @@ namespace ListingLand.Controllers
                             CountryId = vm?.Location.Country.ID,
                             RegionId = vm?.Location.Region.ID,
                             CityId = vm?.Location.City.ID,
-                            Price = vm?.Price,
-                            Area = vm?.Area,
-                            Bedrooms = vm?.Bedrooms,
-                            Bathrooms = vm?.Bathrooms,
-                            OfficeRooms = vm?.OfficeRooms,
-                            Garages = vm?.Garages,
+                            Price = Int32.Parse(vm?.Price),
+                            Area = Int32.Parse(vm?.Area),
+                            Bedrooms = Int32.Parse(vm?.Bedrooms),
+                            Bathrooms = Int32.Parse(vm?.Bathrooms),
+                            OfficeRooms = Int32.Parse(vm?.OfficeRooms),
+                            Garages = Int32.Parse(vm?.Garages),
                             Backyard = vm?.Backyard,
                             Frontyard = vm?.Frontyard
                         });
@@ -533,6 +535,7 @@ namespace ListingLand.Controllers
                         //reinitialize after db save 
                         vm = InitializeListing();
                         vm.IsValid = true;
+                        vm.ListingID = newlisting.Entity.Id;
                     }
                     else
                     {
@@ -545,6 +548,71 @@ namespace ListingLand.Controllers
                 }
             }
             return Ok(vm);
+        }
+
+        [HttpPost]
+        [Route("uploadfiles")]
+        public ActionResult Upload(List<IFormFile> files)
+        {
+            var listingid = Int32.Parse(Request.Form["lsitingid"][0]);
+           
+            if (files != null)
+            {
+                if (files.Count == 0)
+                    return BadRequest("No Image uploaded");
+
+                try
+                {
+                    //validation
+                    foreach (var file in files)
+                    {
+                        if (file.Length > 0)
+                        {
+                            if (!file.IsImage())
+                            {
+                                return BadRequest("All files must be image files");
+                            }
+                        }
+                    }
+
+                    //clearing prev images
+                    if (_db.ListingPics.Any(p => p.ListingId == listingid))
+                    {
+                        _db.ListingPics.RemoveRange(_db.ListingPics.Where(p => p.ListingId == listingid).ToList());
+                    }
+                    //save the file
+                    foreach (var file in files)
+                    {
+                        if (file.Length > 0)
+                        {
+                            #region add image to db
+                            using (MemoryStream ms = new MemoryStream())
+                            {
+                                file.CopyTo(ms);
+                                
+                                _db.ListingPics.Add(new ListingPic()
+                                {
+                                    ListingId = listingid,
+                                    Pic = ms.ToArray()
+                               });
+
+                               _db.SaveChanges();
+
+                                ms.Close();
+                                ms.Dispose();
+                                 
+                            }
+                            #endregion
+                        }
+                    }
+                }
+                catch (Exception exc)
+                {
+                    return BadRequest(exc.Message);
+                }
+
+            }
+            return Ok("Uploaded");
         }
 
         [HttpPost]
