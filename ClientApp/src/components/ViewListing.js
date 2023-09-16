@@ -12,7 +12,7 @@ export const ViewListing = (props) => {
 
         const newvm = await GetListing(searchParams.get("listingid"));
         setvm(newvm);
-        //console.log(newvm);
+       // console.log(newvm);
     }
 
     useEffect(() => {
@@ -28,6 +28,15 @@ export const ViewListing = (props) => {
                     <div className="col-sm-10 col-md-8 bottom15 margin40">
                         <h2 className="text-uppercase bottom40">Property Listing</h2>
                         <div>
+                            <div className="image-container" >
+                                {
+                                    vm.images.map((image, i) => {
+
+                                        return <img src={image.imageSrc} alt="img" />
+
+                                    })
+                                }
+                            </div>
                             <div className="search-propertie-filters">
                                 <div className="container-2">
                                     <div className="row">

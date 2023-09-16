@@ -14,9 +14,17 @@
         OpenText = 3,
         CheckBox = 4
     }
+    public class ListingImage
+    {
+        int ID { get; set;}
+        public string ImageSrc { get; set;} 
+    }
     public class Listing
     {
         public int ListingID { get; set; }
+
+        public List<ListingImage> Images { get; set; } = new List<ListingImage>();
+        
         public string Name { get; set; } = string.Empty;
         public Location Location { get; set; } = new Location();
         public string Price { get; set; }

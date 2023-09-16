@@ -25,6 +25,16 @@ namespace ListingLand.Controllers
         private ViewModels.Listing LoadListing(int listingId)
         {
             var listing = new ViewModels.Listing();
+            listing.ListingID = listingId;
+
+            listing.Images = _db.ListingPics.Where(l => l.ListingId == listingId)
+                .Select(l => new ListingImage()
+                {
+                    ImageSrc = Helpers.Db_Image_Helper.Get_Db_Image(l.Pic)
+
+                }).ToList();
+
+            //listing.Images.AddRange(listing.Images);
 
             var lst = new List<ViewModels.Attribute>();
 
