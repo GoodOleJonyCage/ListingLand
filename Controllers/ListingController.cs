@@ -40,6 +40,9 @@ namespace ListingLand.Controllers
                 var listing = new ViewModels.Listing();
                 
                 listing.ListingID = listingEntry.l.Id;
+                listing.PostedOn = listingEntry.l.PostedOn;
+                listing.PostedOnStr = listingEntry.l.PostedOn.Value.ToString("dd MMM yyyy hh:mm:ss:tt");
+                listing.DaysAgo = (int)(DateTime.Now - listingEntry.l.PostedOn.Value).TotalDays;
                 listing.Name = listingEntry.l.Name;
                 listing.Location.Country.Name = listingEntry.c.Name;
                 listing.Location.Region.Name = listingEntry.r.Name;
@@ -88,10 +91,14 @@ namespace ListingLand.Controllers
                                 join ci in _db.Cities on l.CityId equals ci.Id
                                 where l.Id == listingId
                                 select new { l,c,r,ci }).SingleOrDefault();
-
+           
             if (listingEntry != null)
             {
                 listing.Name = listingEntry.l.Name;
+                listing.PostedOn = listingEntry.l.PostedOn;
+                listing.PostedOnStr = listingEntry.l.PostedOn.Value.ToString("dd MMM yyyy hh:mm:ss:tt");
+                listing.DaysAgo = (int)(DateTime.Now - listingEntry.l.PostedOn.Value).TotalDays;
+                listing.PostedOn = listingEntry.l.PostedOn;
                 listing.Location.Country.Name = listingEntry.c.Name;
                 listing.Location.Region.Name = listingEntry.r.Name;
                 listing.Location.City.Name = listingEntry.ci.Name;

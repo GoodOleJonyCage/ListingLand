@@ -22,7 +22,9 @@
     public class Listing
     {
         public int ListingID { get; set; }
-
+        public DateTime? PostedOn { get; set; }
+        public string PostedOnStr { get; set; }
+        public int DaysAgo { get; set; }
         public List<ListingImage> Images { get; set; } = new List<ListingImage>();
         
         public string Name { get; set; } = string.Empty;

@@ -168,3 +168,28 @@ MuiOutlinedInput-input
 .property-details .pro-list > li {
     padding: 10px 60px 0px 2px;
 }
+ 
+.font-wingdings {
+    font-family: wingdings;
+      margin-left:2px;
+}
+.color-green{
+    color:green;
+}
+.color-red {
+    color: red;
+}
+.listing-icon-container .listing-icon {
+    display: flex !important;
+    gap: 3px;
+}
+.proerty_content .property_meta {
+    display: flex !important;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+
+.property_item img {
+    width: 364px;
+    height: 240px;
+}

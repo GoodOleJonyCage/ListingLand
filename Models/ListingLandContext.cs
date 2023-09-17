@@ -148,6 +148,9 @@ public partial class ListingLandContext : DbContext
             entity.Property(e => e.Name)
                 .HasMaxLength(500)
                 .IsUnicode(false);
+            entity.Property(e => e.PostedOn)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
             entity.Property(e => e.RegionId).HasColumnName("RegionID");
         });
 

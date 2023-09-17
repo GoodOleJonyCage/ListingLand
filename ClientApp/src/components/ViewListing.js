@@ -2,6 +2,7 @@
 import { GetListing,GetListings } from '../Services/Services'
 import { useSearchParams } from 'react-router-dom'
 import { Loading } from './Loading'
+import Moment from 'react-moment';
 //import { useNavigate } from 'react-router-dom';
 
 export const ViewListing = (props) => {
@@ -15,40 +16,41 @@ export const ViewListing = (props) => {
 
         const newvm = await GetListing(searchParams.get("listingid"));
         setvm(newvm);
+        //console.log(newvm);
 
         const listings = await GetListings();
         setsimilarlistings(listings);
         //console.log(listings);
 
-        //let script = document.createElement("script");
-        //script.src = "js/range-Slider.min.js";
-        //script.async = true;
-        //document.body.appendChild(script);
-
-        //script = document.createElement("script");
-        //script.src = "js/owl.carousel.min.js";
-        //script.async = true;
-        //document.body.appendChild(script);
-
         let script = document.createElement("script");
+        script.src = "js/range-Slider.min.js";
+        script.async = true;
+        document.body.appendChild(script);
+
+        script = document.createElement("script");
+        script.src = "js/owl.carousel.min.js";
+        script.async = true;
+        document.body.appendChild(script);
+
+          script = document.createElement("script");
         script.src = "js/functions.js";
         script.async = true;
         document.body.appendChild(script);
 
-        //script = document.createElement("script");
-        //script.src = "js/jquery.cubeportfolio.min.js";
-        //script.async = true;
-        //document.body.appendChild(script);
+        script = document.createElement("script");
+        script.src = "js/jquery.cubeportfolio.min.js";
+        script.async = true;
+        document.body.appendChild(script);
 
-        //script = document.createElement("script");
-        //script.src = "js/selectbox-0.2.min.js";
-        //script.async = true;
-        //document.body.appendChild(script);
+        script = document.createElement("script");
+        script.src = "js/selectbox-0.2.min.js";
+        script.async = true;
+        document.body.appendChild(script);
 
-        //script = document.createElement("script");
-        //script.src = "js/custom.js";
-        //script.async = true;
-        //document.body.appendChild(script);
+        script = document.createElement("script");
+        script.src = "js/custom.js";
+        script.async = true;
+        document.body.appendChild(script);
 
          //console.log(newvm);
     }
@@ -67,7 +69,8 @@ export const ViewListing = (props) => {
                             <div className="row">
                                 <div className="col-md-12 listing1 property-details">
                                     <h2 className="text-uppercase">{vm.name }</h2>
-                                    <p className="bottom30"> {vm.location.city.name}, {vm.location.region.name} {vm.location.country.name}</p>
+                                    <p className=" "> {vm.location.city.name}, {vm.location.region.name} {vm.location.country.name}</p>
+                                    <p className="bottom30">Posted On <i>{vm.postedOnStr}{/* <Moment format="DD MMM YYYY hh:mm:ss:A"> {vm.postedOn}</Moment>*/}</i></p>
                                     <div id="property-d-1" className="owl-carousel single">
                                         {
                                             vm.images.map((image, i) => {
@@ -242,48 +245,54 @@ export const ViewListing = (props) => {
                                                     similarlistings.map((p, i) => {
 
                                                         return <div key={i} className="item clickable  ">
-                                                                <a href={'/viewlisting?listingid=' + p.listingID}>
-                                                                    <div className="property_item heading_space">
-                                                                        <div className="image">
-                                                                            <img src={p.images.length > 0 ? p.images[0].imageSrc : "images/listing1.jpg"} alt="latest property" className="img-responsive" />
-                                                                            <div className="price clearfix">
-                                                                                <span className="tag pull-right">${p.price}</span>
+                                                                    <a href={'/viewlisting?listingid=' + p.listingID}>
+                                                                        <div className="property_item heading_space">
+                                                                            <div className="image">
+                                                                                <img src={p.images.length > 0 ? p.images[0].imageSrc : "images/listing1.jpg"} alt="latest property" className="img-responsive" />
+                                                                                <div className="price clearfix">
+                                                                                    <span className="tag pull-right">${p.price}</span>
+                                                                                </div>
+                                                                                <span className="tag_t">For Sale</span>
+                                                                                <span className="tag_l">Featured</span>
                                                                             </div>
-                                                                            <span className="tag_t">For Sale</span>
-                                                                            <span className="tag_l">Featured</span>
-                                                                        </div>
-                                                                        <div className="proerty_content">
-                                                                            <div className="proerty_text">
-                                                                                <h3 className="captlize"><a href="#.">{p.name}</a></h3>
-                                                                                <p>{p.location.city.name},{p.location.region.name} {p.location.country.name}</p>
-                                                                            </div>
-                                                                            <div className="property_meta transparent">
-                                                                                <span><i className="icon-select-an-objecto-tool"></i>{p.area} sq ft</span>
-                                                                                <span><i className="icon-bed"></i>{p.officeRooms} Office Rooms</span>
-                                                                                <span><i className="icon-safety-shower"></i>{p.bathrooms} Bathroom</span>
-                                                                            </div>
-                                                                            <div className="property_meta transparent bottom30">
-                                                                                <span><i className="icon-old-television"></i>? TV Lounge</span>
+                                                                            <div className="proerty_content">
+                                                                                <div className="proerty_text">
+                                                                                    <h3 className="captlize"><a href="#.">{p.name}</a></h3>
+                                                                                    <p>{p.location.city.name},{p.location.region.name} {p.location.country.name}</p>
+                                                                                </div>
+                                                                            <div className="property_meta transparent listing-icon-container">
+                                                                                    <span><i className="icon-select-an-objecto-tool"></i>{p.area} sq ft</span>
+                                                                                    <span><i className="icon-bed"></i>{p.officeRooms} Office Rooms</span>
+                                                                                    <span><i className="icon-safety-shower"></i>{p.bathrooms} Bathroom</span>
+                                                                                </div>
+                                                                            <div className="property_meta transparent bottom30 listing-icon-container">
+                                                                                <span className="listing-icon">
+                                                                                    <span>FrontYard</span>
+                                                                                    {p.frontyard ? <span className="font-wingdings color-green" >&#252;</span> : <span className="font-wingdings color-red" >&#x2716;</span>}
+                                                                                </span>
+                                                                                <span className="listing-icon">
+                                                                                    <span>BackYard</span>
+                                                                                    {p.backyard  ? <span className="font-wingdings color-green" >&#252;</span> : <span className="font-wingdings color-red" >&#x2716;</span>}
+                                                                                </span>
                                                                                 <span><i className="icon-garage"></i>{p.garages} Garage</span>
-                                                                                <span></span>
-                                                                            </div>
+                                                                             </div>
                                                                             <div className="favroute clearfix">
-                                                                                <p className="pull-md-left"><i className="icon-calendar2"></i>&nbsp;5 Days ago </p>
-                                                                                <ul className="pull-right">
-                                                                                    <li><a href="#."><i className="icon-like"></i></a></li>
-                                                                                    <li><a href="#five" className="share_expender" data-toggle="collapse"><i className="icon-share3"></i></a></li>
-                                                                                </ul>
-                                                                            </div>
-                                                                            <div className="toggle_share collapse" id="five">
-                                                                                <ul>
-                                                                                    <li><a href="#." className="facebook"><i className="icon-facebook-1"></i> Facebook</a></li>
-                                                                                    <li><a href="#." className="twitter"><i className="icon-twitter-1"></i> Twitter</a></li>
-                                                                                    <li><a href="#." className="vimo"><i className="icon-vimeo3"></i> Vimeo</a></li>
-                                                                                </ul>
+                                                                                <p className="pull-md-left"><i className="icon-calendar2"></i> {vm.daysAgo } Days ago </p>
+                                                                                    {/*<ul className="pull-right">*/}
+                                                                                    {/*    <li><a href="#."><i className="icon-like"></i></a></li>*/}
+                                                                                    {/*    <li><a href="#five" className="share_expender" data-toggle="collapse"><i className="icon-share3"></i></a></li>*/}
+                                                                                    {/*</ul>*/}
+                                                                                </div>
+                                                                                <div className="toggle_share collapse" id="five">
+                                                                                    <ul>
+                                                                                        <li><a href="#." className="facebook"><i className="icon-facebook-1"></i> Facebook</a></li>
+                                                                                        <li><a href="#." className="twitter"><i className="icon-twitter-1"></i> Twitter</a></li>
+                                                                                        <li><a href="#." className="vimo"><i className="icon-vimeo3"></i> Vimeo</a></li>
+                                                                                    </ul>
+                                                                                </div>
                                                                             </div>
                                                                         </div>
-                                                                    </div>
-                                                                </a>
+                                                                    </a>
                                                                 </div>
                                                     })
                                                 }
