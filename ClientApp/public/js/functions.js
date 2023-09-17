@@ -251,7 +251,7 @@ jQuery(function($) {
   });
     sync3.owlCarousel({
         autoPlay: true,
-        items: 5,
+        items: 3,
         itemsDesktop: [1199, 10],
         itemsDesktopSmall: [979, 10],
         itemsTablet: [768, 8],

@@ -1,17 +1,24 @@
 ﻿import { useState, useEffect } from 'react'
-import { GetListing } from '../Services/Services'
+import { GetListing,GetListings } from '../Services/Services'
 import { useSearchParams } from 'react-router-dom'
 import { Loading } from './Loading'
+//import { useNavigate } from 'react-router-dom';
 
 export const ViewListing = (props) => {
 
     const [vm, setvm] = useState(null);
     const [searchParams, setSearchParams] = useSearchParams();
+    const [similarlistings, setsimilarlistings] = useState([]);
+    //const navigate = useNavigate();
 
     const loadData = async () => {
 
         const newvm = await GetListing(searchParams.get("listingid"));
         setvm(newvm);
+
+        const listings = await GetListings();
+        setsimilarlistings(listings);
+        //console.log(listings);
 
         //let script = document.createElement("script");
         //script.src = "js/range-Slider.min.js";
@@ -231,258 +238,56 @@ export const ViewListing = (props) => {
                                                     <p className="bottom30">We have Properties in these Areas View a list of Featured Properties.</p>
                                                 </div>
                                             <div className="three-item owl-carousel" id="div-similar-properties">
-                                                    <div className="item">
-                                                        <div className="property_item heading_space">
-                                                            <div className="image">
-                                                                <a href="#."><img src="images/listing1.jpg" alt="latest property" className="img-responsive"/></a>
-                                                                <div className="price clearfix">
-                                                                    <span className="tag pull-right">$8,600 Per Month</span>
+                                                {
+                                                    similarlistings.map((p, i) => {
+
+                                                        return <div key={i} className="item clickable  ">
+                                                                <a href={'/viewlisting?listingid=' + p.listingID}>
+                                                                    <div className="property_item heading_space">
+                                                                        <div className="image">
+                                                                            <img src={p.images.length > 0 ? p.images[0].imageSrc : "images/listing1.jpg"} alt="latest property" className="img-responsive" />
+                                                                            <div className="price clearfix">
+                                                                                <span className="tag pull-right">${p.price}</span>
+                                                                            </div>
+                                                                            <span className="tag_t">For Sale</span>
+                                                                            <span className="tag_l">Featured</span>
+                                                                        </div>
+                                                                        <div className="proerty_content">
+                                                                            <div className="proerty_text">
+                                                                                <h3 className="captlize"><a href="#.">{p.name}</a></h3>
+                                                                                <p>{p.location.city.name},{p.location.region.name} {p.location.country.name}</p>
+                                                                            </div>
+                                                                            <div className="property_meta transparent">
+                                                                                <span><i className="icon-select-an-objecto-tool"></i>{p.area} sq ft</span>
+                                                                                <span><i className="icon-bed"></i>{p.officeRooms} Office Rooms</span>
+                                                                                <span><i className="icon-safety-shower"></i>{p.bathrooms} Bathroom</span>
+                                                                            </div>
+                                                                            <div className="property_meta transparent bottom30">
+                                                                                <span><i className="icon-old-television"></i>? TV Lounge</span>
+                                                                                <span><i className="icon-garage"></i>{p.garages} Garage</span>
+                                                                                <span></span>
+                                                                            </div>
+                                                                            <div className="favroute clearfix">
+                                                                                <p className="pull-md-left"><i className="icon-calendar2"></i>&nbsp;5 Days ago </p>
+                                                                                <ul className="pull-right">
+                                                                                    <li><a href="#."><i className="icon-like"></i></a></li>
+                                                                                    <li><a href="#five" className="share_expender" data-toggle="collapse"><i className="icon-share3"></i></a></li>
+                                                                                </ul>
+                                                                            </div>
+                                                                            <div className="toggle_share collapse" id="five">
+                                                                                <ul>
+                                                                                    <li><a href="#." className="facebook"><i className="icon-facebook-1"></i> Facebook</a></li>
+                                                                                    <li><a href="#." className="twitter"><i className="icon-twitter-1"></i> Twitter</a></li>
+                                                                                    <li><a href="#." className="vimo"><i className="icon-vimeo3"></i> Vimeo</a></li>
+                                                                                </ul>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </a>
                                                                 </div>
-                                                                <span className="tag_t">For Sale</span>
-                                                                <span className="tag_l">Featured</span>
-                                                            </div>
-                                                            <div className="proerty_content">
-                                                                <div className="proerty_text">
-                                                                    <h3 className="captlize"><a href="#.">Historic Town House</a></h3>
-                                                                    <p>45 Regent Street, London, UK</p>
-                                                                </div>
-                                                                <div className="property_meta transparent">
-                                                                    <span><i className="icon-select-an-objecto-tool"></i>4800 sq ft</span>
-                                                                    <span><i className="icon-bed"></i>2 Office Rooms</span>
-                                                                    <span><i className="icon-safety-shower"></i>1 Bathroom</span>
-                                                                </div>
-                                                                <div className="property_meta transparent bottom30">
-                                                                    <span><i className="icon-old-television"></i>TV Lounge</span>
-                                                                    <span><i className="icon-garage"></i>1 Garage</span>
-                                                                    <span></span>
-                                                                </div>
-                                                                <div className="favroute clearfix">
-                                                                    <p className="pull-md-left"><i className="icon-calendar2"></i>&nbsp;5 Days ago </p>
-                                                                    <ul className="pull-right">
-                                                                        <li><a href="#."><i className="icon-like"></i></a></li>
-                                                                        <li><a href="#five" className="share_expender" data-toggle="collapse"><i className="icon-share3"></i></a></li>
-                                                                    </ul>
-                                                                </div>
-                                                                <div className="toggle_share collapse" id="five">
-                                                                    <ul>
-                                                                        <li><a href="#." className="facebook"><i className="icon-facebook-1"></i> Facebook</a></li>
-                                                                        <li><a href="#." className="twitter"><i className="icon-twitter-1"></i> Twitter</a></li>
-                                                                        <li><a href="#." className="vimo"><i className="icon-vimeo3"></i> Vimeo</a></li>
-                                                                    </ul>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div className="item">
-                                                        <div className="property_item heading_space">
-                                                            <div className="image">
-                                                                <a href="#."><img src="images/listing1.jpg" alt="latest property" className="img-responsive"/></a>
-                                                                <div className="price clearfix">
-                                                                    <span className="tag pull-right">$8,600 Per Month</span>
-                                                                </div>
-                                                                <span className="tag_t">For Sale</span>
-                                                                <span className="tag_l">Featured</span>
-                                                            </div>
-                                                            <div className="proerty_content">
-                                                                <div className="proerty_text">
-                                                                    <h3 className="captlize"><a href="#.">Historic Town House</a></h3>
-                                                                    <p>45 Regent Street, London, UK</p>
-                                                                </div>
-                                                                <div className="property_meta transparent">
-                                                                    <span><i className="icon-select-an-objecto-tool"></i>4800 sq ft</span>
-                                                                    <span><i className="icon-bed"></i>2 Office Rooms</span>
-                                                                    <span><i className="icon-safety-shower"></i>1 Bathroom</span>
-                                                                </div>
-                                                                <div className="property_meta transparent bottom30">
-                                                                    <span><i className="icon-old-television"></i>TV Lounge</span>
-                                                                    <span><i className="icon-garage"></i>1 Garage</span>
-                                                                    <span></span>
-                                                                </div>
-                                                                <div className="favroute clearfix">
-                                                                    <p className="pull-md-left"><i className="icon-calendar2"></i>&nbsp;5 Days ago </p>
-                                                                    <ul className="pull-right">
-                                                                        <li><a href="#."><i className="icon-like"></i></a></li>
-                                                                        <li><a href="#six" className="share_expender" data-toggle="collapse"><i className="icon-share3"></i></a></li>
-                                                                    </ul>
-                                                                </div>
-                                                                <div className="toggle_share collapse" id="six">
-                                                                    <ul>
-                                                                        <li><a href="#." className="facebook"><i className="icon-facebook-1"></i> Facebook</a></li>
-                                                                        <li><a href="#." className="twitter"><i className="icon-twitter-1"></i> Twitter</a></li>
-                                                                        <li><a href="#." className="vimo"><i className="icon-vimeo3"></i> Vimeo</a></li>
-                                                                    </ul>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div className="item">
-                                                        <div className="property_item heading_space">
-                                                            <div className="image">
-                                                                <a href="#."><img src="images/listing1.jpg" alt="latest property" className="img-responsive"/></a>
-                                                                <div className="price clearfix">
-                                                                    <span className="tag pull-right">$8,600 Per Month</span>
-                                                                </div>
-                                                                <span className="tag_t">For Sale</span>
-                                                                <span className="tag_l">Featured</span>
-                                                            </div>
-                                                            <div className="proerty_content">
-                                                                <div className="proerty_text">
-                                                                    <h3 className="captlize"><a href="#.">Historic Town House</a></h3>
-                                                                    <p>45 Regent Street, London, UK</p>
-                                                                </div>
-                                                                <div className="property_meta transparent">
-                                                                    <span><i className="icon-select-an-objecto-tool"></i>4800 sq ft</span>
-                                                                    <span><i className="icon-bed"></i>2 Office Rooms</span>
-                                                                    <span><i className="icon-safety-shower"></i>1 Bathroom</span>
-                                                                </div>
-                                                                <div className="property_meta transparent bottom30">
-                                                                    <span><i className="icon-old-television"></i>TV Lounge</span>
-                                                                    <span><i className="icon-garage"></i>1 Garage</span>
-                                                                    <span></span>
-                                                                </div>
-                                                                <div className="favroute clearfix">
-                                                                    <p className="pull-md-left"><i className="icon-calendar2"></i>&nbsp;5 Days ago </p>
-                                                                    <ul className="pull-right">
-                                                                        <li><a href="#."><i className="icon-like"></i></a></li>
-                                                                        <li><a href="#twoo" className="share_expender" data-toggle="collapse"><i className="icon-share3"></i></a></li>
-                                                                    </ul>
-                                                                </div>
-                                                                <div className="toggle_share collapse" id="twoo">
-                                                                    <ul>
-                                                                        <li><a href="#." className="facebook"><i className="icon-facebook-1"></i> Facebook</a></li>
-                                                                        <li><a href="#." className="twitter"><i className="icon-twitter-1"></i> Twitter</a></li>
-                                                                        <li><a href="#." className="vimo"><i className="icon-vimeo3"></i> Vimeo</a></li>
-                                                                    </ul>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div className="item">
-                                                        <div className="property_item heading_space">
-                                                            <div className="image">
-                                                                <a href="#."><img src="images/listing1.jpg" alt="latest property" className="img-responsive"/></a>
-                                                                <div className="price clearfix">
-                                                                    <span className="tag pull-right">$8,600 Per Month</span>
-                                                                </div>
-                                                                <span className="tag_t">For Sale</span>
-                                                                <span className="tag_l">Featured</span>
-                                                            </div>
-                                                            <div className="proerty_content">
-                                                                <div className="proerty_text">
-                                                                    <h3 className="captlize"><a href="#.">Historic Town House</a></h3>
-                                                                    <p>45 Regent Street, London, UK</p>
-                                                                </div>
-                                                                <div className="property_meta transparent">
-                                                                    <span><i className="icon-select-an-objecto-tool"></i>4800 sq ft</span>
-                                                                    <span><i className="icon-bed"></i>2 Office Rooms</span>
-                                                                    <span><i className="icon-safety-shower"></i>1 Bathroom</span>
-                                                                </div>
-                                                                <div className="property_meta transparent bottom30">
-                                                                    <span><i className="icon-old-television"></i>TV Lounge</span>
-                                                                    <span><i className="icon-garage"></i>1 Garage</span>
-                                                                    <span></span>
-                                                                </div>
-                                                                <div className="favroute clearfix">
-                                                                    <p className="pull-md-left"><i className="icon-calendar2"></i>&nbsp;5 Days ago </p>
-                                                                    <ul className="pull-right">
-                                                                        <li><a href="#."><i className="icon-like"></i></a></li>
-                                                                        <li><a href="#four" className="share_expender" data-toggle="collapse"><i className="icon-share3"></i></a></li>
-                                                                    </ul>
-                                                                </div>
-                                                                <div className="toggle_share collapse" id="four">
-                                                                    <ul>
-                                                                        <li><a href="#." className="facebook"><i className="icon-facebook-1"></i> Facebook</a></li>
-                                                                        <li><a href="#." className="twitter"><i className="icon-twitter-1"></i> Twitter</a></li>
-                                                                        <li><a href="#." className="vimo"><i className="icon-vimeo3"></i> Vimeo</a></li>
-                                                                    </ul>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div className="item">
-                                                        <div className="property_item heading_space">
-                                                            <div className="image">
-                                                                <a href="#."><img src="images/listing1.jpg" alt="latest property" className="img-responsive"/></a>
-                                                                <div className="price clearfix">
-                                                                    <span className="tag pull-right">$8,600 Per Month</span>
-                                                                </div>
-                                                                <span className="tag_t">For Sale</span>
-                                                                <span className="tag_l">Featured</span>
-                                                            </div>
-                                                            <div className="proerty_content">
-                                                                <div className="proerty_text">
-                                                                    <h3 className="captlize"><a href="#.">Historic Town House</a></h3>
-                                                                    <p>45 Regent Street, London, UK</p>
-                                                                </div>
-                                                                <div className="property_meta transparent">
-                                                                    <span><i className="icon-select-an-objecto-tool"></i>4800 sq ft</span>
-                                                                    <span><i className="icon-bed"></i>2 Office Rooms</span>
-                                                                    <span><i className="icon-safety-shower"></i>1 Bathroom</span>
-                                                                </div>
-                                                                <div className="property_meta transparent bottom30">
-                                                                    <span><i className="icon-old-television"></i>TV Lounge</span>
-                                                                    <span><i className="icon-garage"></i>1 Garage</span>
-                                                                    <span></span>
-                                                                </div>
-                                                                <div className="favroute clearfix">
-                                                                    <p className="pull-md-left"><i className="icon-calendar2"></i>&nbsp;5 Days ago </p>
-                                                                    <ul className="pull-right">
-                                                                        <li><a href="#."><i className="icon-like"></i></a></li>
-                                                                        <li><a href="#some" className="share_expender" data-toggle="collapse"><i className="icon-share3"></i></a></li>
-                                                                    </ul>
-                                                                </div>
-                                                                <div className="toggle_share collapse" id="some">
-                                                                    <ul>
-                                                                        <li><a href="#." className="facebook"><i className="icon-facebook-1"></i> Facebook</a></li>
-                                                                        <li><a href="#." className="twitter"><i className="icon-twitter-1"></i> Twitter</a></li>
-                                                                        <li><a href="#." className="vimo"><i className="icon-vimeo3"></i> Vimeo</a></li>
-                                                                    </ul>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div className="item">
-                                                        <div className="property_item heading_space">
-                                                            <div className="image">
-                                                                <a href="#."><img src="images/listing1.jpg" alt="latest property" className="img-responsive"/></a>
-                                                                <div className="price clearfix">
-                                                                    <span className="tag pull-right">$8,600 Per Month</span>
-                                                                </div>
-                                                                <span className="tag_t">For Sale</span>
-                                                                <span className="tag_l">Featured</span>
-                                                            </div>
-                                                            <div className="proerty_content">
-                                                                <div className="proerty_text">
-                                                                    <h3 className="captlize"><a href="#.">Historic Town House</a></h3>
-                                                                    <p>45 Regent Street, London, UK</p>
-                                                                </div>
-                                                                <div className="property_meta transparent">
-                                                                    <span><i className="icon-select-an-objecto-tool"></i>4800 sq ft</span>
-                                                                    <span><i className="icon-bed"></i>2 Office Rooms</span>
-                                                                    <span><i className="icon-safety-shower"></i>1 Bathroom</span>
-                                                                </div>
-                                                                <div className="property_meta transparent bottom30">
-                                                                    <span><i className="icon-old-television"></i>TV Lounge</span>
-                                                                    <span><i className="icon-garage"></i>1 Garage</span>
-                                                                    <span></span>
-                                                                </div>
-                                                                <div className="favroute clearfix">
-                                                                    <p className="pull-md-left"><i className="icon-calendar2"></i>&nbsp;5 Days ago </p>
-                                                                    <ul className="pull-right">
-                                                                        <li><a href="#."><i className="icon-like"></i></a></li>
-                                                                        <li><a href="#three" className="share_expender" data-toggle="collapse"><i className="icon-share3"></i></a></li>
-                                                                    </ul>
-                                                                </div>
-                                                                <div className="toggle_share collapse" id="three">
-                                                                    <ul>
-                                                                        <li><a href="#." className="facebook"><i className="icon-facebook-1"></i> Facebook</a></li>
-                                                                        <li><a href="#." className="twitter"><i className="icon-twitter-1"></i> Twitter</a></li>
-                                                                        <li><a href="#." className="vimo"><i className="icon-vimeo3"></i> Vimeo</a></li>
-                                                                    </ul>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                                                    })
+                                                }
+                                                
                                                 </div>
                                             </div>
                                              

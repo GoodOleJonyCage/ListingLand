@@ -1,5 +1,5 @@
 ﻿import { useState, useEffect } from 'react'
-import { GetNewListing, CreateListing, UploadFiles } from '../Services/Services'
+import { GetNewListing, CreateListing, UploadFiles  } from '../Services/Services'
 import { Loading } from './Loading'
 import { LocationLocator } from './LocationLocator'
 
@@ -11,13 +11,14 @@ export const NewListing = () => {
 
     const [listingCreated, setlistingCreated] = useState(false);
     const [uploadpic, setuploadpic] = useState(false);
-    
 
+    
     const loadData = async () => {
 
         const newvm = await GetNewListing();
         setvm(newvm);
         //console.log(newvm);
+       
     }
 
     useEffect(() => {

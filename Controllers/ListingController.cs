@@ -6,7 +6,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
+using System.Reflection;
 using static System.Collections.Specialized.BitVector32;
+using Location = ListingLand.ViewModels.Location;
 
 namespace ListingLand.Controllers
 {
@@ -20,6 +23,48 @@ namespace ListingLand.Controllers
         {
             _db = db;
 
+        }
+
+        private List<ViewModels.Listing> LoadListings()
+        {
+            var listings = new List<ViewModels.Listing>();
+
+            var  lst = (from l in _db.Listings
+                            join c in _db.Countries on l.CountryId equals c.Id
+                            join r in _db.Regions on l.RegionId equals r.Id
+                            join ci in _db.Cities on l.CityId equals ci.Id
+                            select new { l, c, r, ci }).ToList();
+
+            lst.ForEach(listingEntry =>
+            {
+                var listing = new ViewModels.Listing();
+                
+                listing.ListingID = listingEntry.l.Id;
+                listing.Name = listingEntry.l.Name;
+                listing.Location.Country.Name = listingEntry.c.Name;
+                listing.Location.Region.Name = listingEntry.r.Name;
+                listing.Location.City.Name = listingEntry.ci.Name;
+                listing.Price = (listingEntry.l.Price ?? 0).ToString();
+                listing.Area = (listingEntry.l.Area ?? 0).ToString();
+                listing.Bedrooms = (listingEntry.l.Bedrooms ?? 0).ToString();
+                listing.Bathrooms = ((listingEntry.l.Bathrooms ?? 0).ToString());
+                listing.OfficeRooms = (listingEntry.l.OfficeRooms ?? 0).ToString();
+                listing.Garages = (listingEntry.l.Garages ?? 0).ToString();
+                listing.Backyard = listingEntry.l.Backyard ?? false;
+                listing.Frontyard = listingEntry.l.Frontyard ?? false;
+                
+                listing.Images = _db.ListingPics.Where(l => l.ListingId == listing.ListingID)
+                .Select(l => new ListingImage()
+                {
+                    ImageSrc = Helpers.Db_Image_Helper.Get_Db_Image(l.Pic)
+
+                }).ToList();
+
+                listings.Add(listing);
+
+            });
+
+            return listings;
         }
 
         private ViewModels.Listing LoadListing(int listingId)
@@ -643,6 +688,24 @@ namespace ListingLand.Controllers
 
             return Ok(listing);
         }
-        
+
+        [HttpGet]
+        [Route("getlistings")]
+        public IActionResult GetListings()
+        {
+            var listings = new List<ViewModels.Listing>();
+
+            try
+            {
+                listings = LoadListings();
+            }
+            catch (Exception exc)
+            {
+                return BadRequest(exc.Message);
+            }
+
+            return Ok(listings);
+        }
+
     }
 }

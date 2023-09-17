@@ -27,12 +27,12 @@
         
         public string Name { get; set; } = string.Empty;
         public Location Location { get; set; } = new Location();
-        public string Price { get; set; }
-        public string Area { get; set; }
-        public string Bedrooms { get; set; }
-        public string Bathrooms { get; set; }
-        public string OfficeRooms { get; set; }
-        public string Garages { get; set; }
+        public string Price { get; set; } = string.Empty;
+        public string Area { get; set; } = string.Empty;
+        public string Bedrooms { get; set; } = string.Empty;
+        public string Bathrooms { get; set; } = string.Empty;
+        public string OfficeRooms { get; set; } = string.Empty;
+        public string Garages { get; set; } = string.Empty;
         public bool Backyard { get; set; }
         public bool Frontyard { get; set; }
 

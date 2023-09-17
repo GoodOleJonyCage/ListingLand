@@ -113,6 +113,24 @@ export const GetListing = async (_listingid) => {
     throw response;
 }
 
+export const GetListings = async () => {
+
+    let response = await fetch(`listing/getlistings`, {
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            //'Authorization': "Bearer " + getJwtToken()
+        },
+        //method: 'POST',
+        //body: JSON.stringify({ listingid: _listingid }),
+    });
+    if (response.ok) {
+        const data = await response.json();
+        return data;
+    }
+    throw response;
+}
+
 export const CreateListing = async (_vm) => {
 
     let response = await fetch(`listing/createlisting`, {
