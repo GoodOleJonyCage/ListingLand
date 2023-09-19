@@ -193,3 +193,8 @@ MuiOutlinedInput-input
     width: 364px;
     height: 240px;
 }
+
+.owl-carousel .main-image-container img {
+    width: 100%;
+    height: 100%;
+}

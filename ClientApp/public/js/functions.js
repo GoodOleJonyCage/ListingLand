@@ -223,8 +223,9 @@ jQuery(function($) {
   
   //Property Details
   var sync1 = $("#property-d-1");
-    var sync2 = $("#property-d-1-2");
-    var sync3 = $("#div-similar-properties");
+  var sync2 = $("#property-d-1-2");
+  var sync3 = $("#div-similar-properties");
+ 
   sync1.owlCarousel({
     autoPlay: 3000,
     singleItem: true,
@@ -663,5 +664,14 @@ jQuery(function($) {
   
   
   
-  $('.fancybox').fancybox();
+    //$('.fancybox').fancybox();
+
+    $('[data-fancybox="images"]').fancybox({
+        beforeLoad: function (instance, current) {
+            if (current.src === '#') {
+                current.src = current.opts.$orig.find('img').attr('src');
+            }
+        }
+    })
+
 });

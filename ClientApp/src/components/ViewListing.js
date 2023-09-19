@@ -32,7 +32,7 @@ export const ViewListing = (props) => {
         script.async = true;
         document.body.appendChild(script);
 
-          script = document.createElement("script");
+        script = document.createElement("script");
         script.src = "js/functions.js";
         script.async = true;
         document.body.appendChild(script);
@@ -74,17 +74,19 @@ export const ViewListing = (props) => {
                                     <div id="property-d-1" className="owl-carousel single">
                                         {
                                             vm.images.map((image, i) => {
-                                                return <div className="item" key={i}>
-                                                        <img src={image.imageSrc} alt="image" />
-                                                </div>
+                                                return <div className="item main-image-container" key={i}>
+                                                        <a data-fancybox="images" data-type="image" data-src="#">
+                                                            <img src={image.imageSrc} alt="image"></img>
+                                                        </a>
+                                                     </div>
                                             })
                                         }
                                     </div>
                                     <div id="property-d-1-2" className="owl-carousel single">
                                         {
                                             vm.images.map((image, i) => {
-                                                return <div className="item" key={i}>
-                                                    <img src={image.imageSrc} alt="image" />
+                                                return <div className="item" key={i} >
+                                                    <img src={image.imageSrc} alt="image"  />
                                                 </div>
                                             })
                                         }
@@ -162,7 +164,7 @@ export const ViewListing = (props) => {
                                                 return <div className="col-md-4 col-sm-4 col-xs-12">
                                                     <div className="pro-img">
                                                         <figure className="wpf-demo-gallery">
-                                                            <img src={image.imageSrc} alt="image" />
+                                                            <img src={image.imageSrc} alt="image"  />
                                                             <figcaption className="view-caption">
                                                                 <a data-fancybox-group="gallery" className="fancybox" href="images/property-details/property-d-1-f-1.jpg"><i className="icon-focus"></i></a>
                                                             </figcaption>
@@ -245,26 +247,28 @@ export const ViewListing = (props) => {
                                                     similarlistings.map((p, i) => {
 
                                                         return <div key={i} className="item clickable  ">
-                                                                    <a href={'/viewlisting?listingid=' + p.listingID}>
-                                                                        <div className="property_item heading_space">
-                                                                            <div className="image">
-                                                                                <img src={p.images.length > 0 ? p.images[0].imageSrc : "images/listing1.jpg"} alt="latest property" className="img-responsive" />
-                                                                                <div className="price clearfix">
-                                                                                    <span className="tag pull-right">${p.price}</span>
-                                                                                </div>
-                                                                                <span className="tag_t">For Sale</span>
-                                                                                <span className="tag_l">Featured</span>
+                                                                <div className="property_item heading_space">
+                                                                    <a data-fancybox="images" data-type="image" data-src="#">
+                                                                        <div className="image">
+                                                                            <img src={p.images.length > 0 ? p.images[0].imageSrc : "images/listing1.jpg"} alt="latest property" className="img-responsive " />
+                                                                            <div className="price clearfix">
+                                                                                <span className="tag pull-right">${p.price}</span>
                                                                             </div>
-                                                                            <div className="proerty_content">
-                                                                                <div className="proerty_text">
-                                                                                    <h3 className="captlize"><a href="#.">{p.name}</a></h3>
-                                                                                    <p>{p.location.city.name},{p.location.region.name} {p.location.country.name}</p>
-                                                                                </div>
+                                                                            <span className="tag_t">For Sale</span>
+                                                                            <span className="tag_l">Featured</span>
+                                                                        </div>
+                                                                    </a>
+                                                                    <a href={'/viewlisting?listingid=' + p.listingID}>
+                                                                        <div className="proerty_content">
+                                                                            <div className="proerty_text">
+                                                                                <h3 className="captlize"><a href="#.">{p.name}</a></h3>
+                                                                                <p>{p.location.city.name},{p.location.region.name} {p.location.country.name}</p>
+                                                                            </div>
                                                                             <div className="property_meta transparent listing-icon-container">
-                                                                                    <span><i className="icon-select-an-objecto-tool"></i>{p.area} sq ft</span>
-                                                                                    <span><i className="icon-bed"></i>{p.officeRooms} Office Rooms</span>
-                                                                                    <span><i className="icon-safety-shower"></i>{p.bathrooms} Bathroom</span>
-                                                                                </div>
+                                                                                <span><i className="icon-select-an-objecto-tool"></i>{p.area} sq ft</span>
+                                                                                <span><i className="icon-bed"></i>{p.officeRooms} Office Rooms</span>
+                                                                                <span><i className="icon-safety-shower"></i>{p.bathrooms} Bathroom</span>
+                                                                            </div>
                                                                             <div className="property_meta transparent bottom30 listing-icon-container">
                                                                                 <span className="listing-icon">
                                                                                     <span>FrontYard</span>
@@ -272,34 +276,32 @@ export const ViewListing = (props) => {
                                                                                 </span>
                                                                                 <span className="listing-icon">
                                                                                     <span>BackYard</span>
-                                                                                    {p.backyard  ? <span className="font-wingdings color-green" >&#252;</span> : <span className="font-wingdings color-red" >&#x2716;</span>}
+                                                                                    {p.backyard ? <span className="font-wingdings color-green" >&#252;</span> : <span className="font-wingdings color-red" >&#x2716;</span>}
                                                                                 </span>
                                                                                 <span><i className="icon-garage"></i>{p.garages} Garage</span>
-                                                                             </div>
+                                                                            </div>
                                                                             <div className="favroute clearfix">
-                                                                                <p className="pull-md-left"><i className="icon-calendar2"></i> {vm.daysAgo } Days ago </p>
-                                                                                    {/*<ul className="pull-right">*/}
-                                                                                    {/*    <li><a href="#."><i className="icon-like"></i></a></li>*/}
-                                                                                    {/*    <li><a href="#five" className="share_expender" data-toggle="collapse"><i className="icon-share3"></i></a></li>*/}
-                                                                                    {/*</ul>*/}
-                                                                                </div>
-                                                                                <div className="toggle_share collapse" id="five">
-                                                                                    <ul>
-                                                                                        <li><a href="#." className="facebook"><i className="icon-facebook-1"></i> Facebook</a></li>
-                                                                                        <li><a href="#." className="twitter"><i className="icon-twitter-1"></i> Twitter</a></li>
-                                                                                        <li><a href="#." className="vimo"><i className="icon-vimeo3"></i> Vimeo</a></li>
-                                                                                    </ul>
-                                                                                </div>
+                                                                                <p className="pull-md-left"><i className="icon-calendar2"></i> {vm.daysAgo} Days ago </p>
+                                                                                {/*<ul className="pull-right">*/}
+                                                                                {/*    <li><a href="#."><i className="icon-like"></i></a></li>*/}
+                                                                                {/*    <li><a href="#five" className="share_expender" data-toggle="collapse"><i className="icon-share3"></i></a></li>*/}
+                                                                                {/*</ul>*/}
+                                                                            </div>
+                                                                            <div className="toggle_share collapse" id="five">
+                                                                                <ul>
+                                                                                    <li><a href="#." className="facebook"><i className="icon-facebook-1"></i> Facebook</a></li>
+                                                                                    <li><a href="#." className="twitter"><i className="icon-twitter-1"></i> Twitter</a></li>
+                                                                                    <li><a href="#." className="vimo"><i className="icon-vimeo3"></i> Vimeo</a></li>
+                                                                                </ul>
                                                                             </div>
                                                                         </div>
                                                                     </a>
                                                                 </div>
+                                                            </div>
                                                     })
                                                 }
-                                                
                                                 </div>
                                             </div>
-                                             
                                         </div>
                                     </div>
                                 </div>
