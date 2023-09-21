@@ -4,11 +4,12 @@ import { GetSearchVM, GetSearchResults } from '../Services/Services'
 export const Search = (props) => {
 
     const [vm, setvm] = useState({});
+    const [error, seterror] = useState('');
 
     const loadData = async () => {
 
-        //const vm = await GetSearchVM();
-        //setvm(vm);
+        const vm = await GetSearchVM();
+        setvm(vm);
         //console.log(vm);
      
     }
@@ -25,7 +26,11 @@ export const Search = (props) => {
                 </div>
                 <div className="callus">
                     <div className="single-query form-group col-sm-12">
-                        <input type="text" className="keyword-input" placeholder="Keyword (e.g. 'office')" />
+                        <input
+                            onChange={(e) => {
+                                vm.name = e.target.value;
+                            }}
+                            type="text" className="keyword-input" placeholder="Keyword (e.g. 'office')" />
                     </div>
                     <div className="single-query form-group col-sm-12">
                         <div className="intro">
@@ -42,27 +47,29 @@ export const Search = (props) => {
                     </div>
                     <div className="single-query form-group col-sm-12">
                         <div className="intro">
-                            <select>
-                                <option className="active">Property Type</option>
-                                <option>All areas</option>
-                                <option>Bayonne </option>
-                                <option>Greenville</option>
-                                <option>Manhattan</option>
-                                <option>Queens</option>
-                                <option>The Heights</option>
+                            <select id="sel-officerooms"  >
+                                <option value="-1" className="active">Min Office Rooms</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                                <option value="7">7</option>
                             </select>
                         </div>
                     </div>
                     <div className="single-query form-group col-sm-12">
                         <div className="intro">
-                            <select>
-                                <option className="active">Property Status</option>
-                                <option>All areas</option>
-                                <option>Bayonne </option>
-                                <option>Greenville</option>
-                                <option>Manhattan</option>
-                                <option>Queens</option>
-                                <option>The Heights</option>
+                            <select id="sel-garages">
+                                <option value="-1" className="active">Min Garages</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                                <option value="7">7</option>
                             </select>
                         </div>
                     </div>
@@ -71,14 +78,15 @@ export const Search = (props) => {
                             <div className="col-sm-6">
                                 <div className="single-query form-group">
                                     <div className="intro">
-                                        <select>
-                                            <option className="active">Min Beds</option>
-                                            <option>1</option>
-                                            <option>2</option>
-                                            <option>3</option>
-                                            <option>4</option>
-                                            <option>5</option>
-                                            <option>6</option>
+                                        <select id="sel-beds" >
+                                            <option value="-1" className="active">Min Beds</option>
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4">4</option>
+                                            <option value="5">5</option>
+                                            <option value="6">6</option>
+                                            <option value="7">7</option>
                                         </select>
                                     </div>
                                 </div>
@@ -86,14 +94,15 @@ export const Search = (props) => {
                             <div className="col-sm-6">
                                 <div className="single-query form-group">
                                     <div className="intro">
-                                        <select>
-                                            <option className="active">Min Baths</option>
-                                            <option>1</option>
-                                            <option>2</option>
-                                            <option>3</option>
-                                            <option>4</option>
-                                            <option>5</option>
-                                            <option>6</option>
+                                        <select id="sel-baths">
+                                            <option value="-1" className="active">Min Baths</option>
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4">4</option>
+                                            <option value="5">5</option>
+                                            <option value="6">6</option>
+                                            <option value="7">7</option>
                                         </select>
                                     </div>
                                 </div>
@@ -104,24 +113,59 @@ export const Search = (props) => {
                         <div className="row">
                             <div className="col-sm-6">
                                 <div className="single-query form-group">
-                                    <input type="text" className="keyword-input" placeholder="Min Area (sq ft)" />
+                                    <input
+                                        onChange={(e) => {
+                                            vm.areaFrom = e.target.value;
+                                        }}
+                                        type="text" className="keyword-input" placeholder="Min Area (sq ft)" />
                                 </div>
                             </div>
                             <div className="col-sm-6">
                                 <div className="single-query form-group">
-                                    <input type="text" className="keyword-input" placeholder="Max Area (sq ft)" />
+                                    <input
+                                        onChange={(e) => {
+                                            vm.areaTo = e.target.value;
+                                        }}
+                                        type="text" className="keyword-input" placeholder="Max Area (sq ft)" />
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div className="col-sm-12 bottom10">
+
+                    <div className="col-sm-12">
+                        <div className="row">
+                            <div className="col-sm-6">
+                                <div className="single-query form-group">
+                                    <div className="intro">
+                                        <select id="sel-frontyard" >
+                                            <option value="-1" className="active">Front Yard</option>
+                                            <option value="1">Yes</option>
+                                            <option value="0">No</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="col-sm-6">
+                                <div className="single-query form-group">
+                                    <div className="intro">
+                                        <select id="sel-backyard" >
+                                            <option value="-1" className="active">Back Yard</option>
+                                            <option value="1">Yes</option>
+                                            <option value="0">No</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="col-sm-12 bottom30">
                         <div className="single-query-slider">
                             <label><strong>Price Range:</strong></label>
-                            <div className="price text-right">
+                            <div className="price text-right price-container">
                                 <span>$</span>
-                                <div className="leftLabel"></div>
+                                <div className="leftLabel" id="leftLabel"></div>
                                 <span>to $</span>
-                                <div className="rightLabel"></div>
+                                <div className="rightLabel" id="rightLabel"></div>
                             </div>
                             <div data-range_min="0" data-range_max="1500000" data-cur_min="0" data-cur_max="1500000" className="nstSlider">
                                 <div className="bar"></div>
@@ -130,12 +174,33 @@ export const Search = (props) => {
                             </div>
                         </div>
                     </div>
+                    <div className="col-sm-12 form-group highlight-error ">
+                        {error}
+                    </div>
                     <div className="col-sm-12 form-group">
                         <button
                             onClick={async (e) => {
                                 e.preventDefault();
-                                const listings = await GetSearchResults(vm);
-                                props.setlistings(listings);
+                                vm.priceFrom = document.getElementById('leftLabel').innerHTML;
+                                vm.priceTo = document.getElementById('rightLabel').innerHTML;
+                                vm.frontYard = document.getElementById('sel-frontyard').value; 
+                                vm.backYard = document.getElementById('sel-backyard').value; 
+
+                                vm.minOfficeRooms = document.getElementById('sel-officerooms').value; 
+                                vm.minGarages = document.getElementById('sel-garages').value; 
+                                vm.minBedrooms = document.getElementById('sel-beds').value; 
+                                vm.minBaths = document.getElementById('sel-baths').value; 
+                                try {
+                                    seterror('');
+                                    props.setloading(true);
+                                    const listings = await GetSearchResults(vm);
+                                    props.setloading(false);
+                                    props.setlistings(listings);
+                                } catch (e) {
+                                    props.setloading(false);
+                                    e.json().then(error => { seterror(error);});
+                                }
+                                
                             }}
                             className="btn-blue border_radius">Search</button>
                     </div>

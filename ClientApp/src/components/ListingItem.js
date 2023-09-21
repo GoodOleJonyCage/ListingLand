@@ -1,7 +1,7 @@
 ﻿
 
 export const ListingItem = (props) => {
-     
+   
     return <>
         <div   className="col-sm-6">
             <div className="property_item heading_space">
@@ -20,8 +20,8 @@ export const ListingItem = (props) => {
                 <a href={'/viewlisting?listingid=' + props.listing.listingID}>
                     <div className="proerty_content">
                         <div className="property_meta props.listing-icon-container">
-                            <span><i className="icon-select-an-objecto-tool"></i>{props.listing.area} sq ft</span>
-                            <span><i className="icon-bed"></i>{props.listing.officeRooms} Office Rooms</span>
+                            <span><i className="icon-bed"></i>{props.listing.bedrooms} BedRooms</span>
+                            <span><i className="icon-bed"></i>{props.listing.officeRooms} OfficeRooms</span>
                             <span><i className="icon-safety-shower"></i>{props.listing.bathrooms} Bathrooms</span>
                         </div>
                         <div className="property_meta props.listing-icon-container">
@@ -35,14 +35,16 @@ export const ListingItem = (props) => {
                             </span>
                             <span><i className="icon-garage"></i>{props.listing.garages} Garage</span>
                         </div>
+                        <div className="property_meta props.listing-icon-container">
+                            <span><i className="icon-select-an-objecto-tool"></i>{props.listing.area} sq ft</span>
+                            <span className="pull-md-left">${props.listing.price}</span>
+                            <span>{props.listing.postedOnStr} </span>
+                        </div>
                         {/*<div className="proerty_text">*/}
                         {/*    <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam power nonummy nibh tempor*/}
                         {/*        cum soluta nobis…*/}
                         {/*    </p>*/}
                         {/*</div>*/}
-                        <div className="favroute clearfix">
-                            <p className="pull-md-left">${props.listing.price}</p>
-                        </div>
                         <div className="favroute clearfix">
                             <p className="pull-md-left">{props.listing.daysAgo} Days Ago</p>
                             <ul className="pull-right">

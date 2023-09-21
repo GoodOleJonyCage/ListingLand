@@ -44,6 +44,9 @@ export const PagedListings = (props) => {
                 {renderPageNumbers}
             </ul>
             <div>
+                {props.listings.length } Items
+            </div>
+            <div>
                 Page {currentPage}
             </div>
         </div>

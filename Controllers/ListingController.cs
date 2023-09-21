@@ -7,6 +7,7 @@ using Microsoft.CodeAnalysis;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using static System.Collections.Specialized.BitVector32;
 using Location = ListingLand.ViewModels.Location;
@@ -23,6 +24,84 @@ namespace ListingLand.Controllers
         {
             _db = db;
 
+        }
+
+        private List<ViewModels.Listing> LoadListings(ViewModels.Search vm)
+        {
+            var listings = new List<ViewModels.Listing>();
+          
+            var lst = (from l in _db.Listings
+                       join c in _db.Countries on l.CountryId equals c.Id
+                       join r in _db.Regions on l.RegionId equals r.Id
+                       join ci in _db.Cities on l.CityId equals ci.Id
+                       select new { l, c, r, ci }).ToList();
+
+            if (vm.MinGarages > -1)
+                lst = lst.Where(l => l.l.Garages >= vm.MinGarages).ToList();
+
+            if (vm.MinBaths > -1 )
+                lst = lst.Where(l => l.l.Bathrooms >= vm.MinBaths).ToList();
+
+            if (vm.MinBedrooms > -1 )
+                lst = lst.Where(l => l.l.Bedrooms >= vm.MinBedrooms).ToList();
+
+            if (vm.MinOfficeRooms > -1)
+                lst = lst.Where(l => l.l.OfficeRooms >= vm.MinOfficeRooms).ToList();
+
+            lst = lst.Where(l => l.l.Price >= vm.PriceFrom && l.l.Price <= vm.PriceTo).ToList();
+
+            if (!string.IsNullOrEmpty(vm.AreaTo) && !string.IsNullOrEmpty(vm.AreaFrom))
+                lst = lst.Where(l => l.l.Area >= Int32.Parse(vm.AreaFrom) && l.l.Area <= Int32.Parse(vm.AreaTo)).ToList();
+
+            if (!string.IsNullOrEmpty(vm.Name))
+                lst = lst.Where(l => l.l.Name.Contains(vm.Name)).ToList();
+
+            if(vm.FrontYard > -1)
+            {
+                bool hasFrontYard = vm.FrontYard == 1;
+                lst = lst.Where(l => l.l.Frontyard.Value == hasFrontYard).ToList();
+             }
+            if (vm.BackYard > -1)
+            {
+                bool hasBackYard = vm.BackYard == 1;
+                lst = lst.Where(l => l.l.Backyard.Value == hasBackYard).ToList();
+            }
+
+            //location
+
+            lst.ForEach(listingEntry =>
+            {
+                var listing = new ViewModels.Listing();
+
+                listing.ListingID = listingEntry.l.Id;
+                listing.PostedOn = listingEntry.l.PostedOn;
+                listing.PostedOnStr = listingEntry.l.PostedOn.Value.ToString("dd MMM yyyy hh:mm:ss:tt");
+                listing.DaysAgo = (int)(DateTime.Now - listingEntry.l.PostedOn.Value).TotalDays;
+                listing.Name = listingEntry.l.Name;
+                listing.Location.Country.Name = listingEntry.c.Name;
+                listing.Location.Region.Name = listingEntry.r.Name;
+                listing.Location.City.Name = listingEntry.ci.Name;
+                listing.Price = (listingEntry.l.Price ?? 0).ToString();
+                listing.Area = (listingEntry.l.Area ?? 0).ToString();
+                listing.Bedrooms = (listingEntry.l.Bedrooms ?? 0).ToString();
+                listing.Bathrooms = ((listingEntry.l.Bathrooms ?? 0).ToString());
+                listing.OfficeRooms = (listingEntry.l.OfficeRooms ?? 0).ToString();
+                listing.Garages = (listingEntry.l.Garages ?? 0).ToString();
+                listing.Backyard = listingEntry.l.Backyard ?? false;
+                listing.Frontyard = listingEntry.l.Frontyard ?? false;
+
+                listing.Images = _db.ListingPics.Where(l => l.ListingId == listing.ListingID)
+                .Select(l => new ListingImage()
+                {
+                    ImageSrc = Helpers.Db_Image_Helper.Get_Db_Image(l.Pic)
+
+                }).ToList();
+
+                listings.Add(listing);
+
+            });
+
+            return listings;
         }
 
         private List<ViewModels.Listing> LoadListings()
@@ -719,7 +798,7 @@ namespace ListingLand.Controllers
         [Route("getsearchvm")]
         public IActionResult GetSearchVm()
         {
-            var listings = new List<ViewModels.Listing>();
+            var vm = new ViewModels.Search();
 
             //try
             //{
@@ -730,23 +809,34 @@ namespace ListingLand.Controllers
             //    return BadRequest(exc.Message);
             //}
 
-            return Ok(listings);
+            return Ok(vm);
         }
         
         [HttpPost]
         [Route("getsearchresults")]
-        public IActionResult GetSearchReults()
+        public IActionResult GetSearchReults([FromBody] System.Text.Json.JsonElement param)
         {
+            var vm = JsonConvert.DeserializeObject<ViewModels.Search>(param.GetProperty("vm").ToString()); 
             var listings = new List<ViewModels.Listing>();
 
-            //try
-            //{
-            //    listings = LoadListings();
-            //}
-            //catch (Exception exc)
-            //{
-            //    return BadRequest(exc.Message);
-            //}
+            int result = 0;
+            if(!string.IsNullOrEmpty(vm.AreaFrom) && !Int32.TryParse(vm.AreaFrom, out result))
+            {
+                return BadRequest("Min.Area has to be numeric");
+            }
+            if (!string.IsNullOrEmpty(vm.AreaTo) && !Int32.TryParse(vm.AreaTo, out result))
+            {
+                return BadRequest("Max.Area has to be numeric");
+            }
+
+            try
+            {
+                listings = LoadListings(vm);
+            }
+            catch (Exception exc)
+            {
+                return BadRequest(exc.Message);
+            }
 
             return Ok(listings);
         }

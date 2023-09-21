@@ -264,12 +264,12 @@ export const ViewListing = (props) => {
                                                                                 <h3 className="captlize"><a href="#.">{p.name}</a></h3>
                                                                                 <p>{p.location.city.name},{p.location.region.name} {p.location.country.name}</p>
                                                                             </div>
-                                                                            <div className="property_meta transparent listing-icon-container">
-                                                                                <span><i className="icon-select-an-objecto-tool"></i>{p.area} sq ft</span>
+                                                                        <div className="property_meta transparent listing-icon-container">
+                                                                                <span><i className="icon-select-an-objecto-tool"></i>{p.bedrooms} Bedrooms</span>
                                                                                 <span><i className="icon-bed"></i>{p.officeRooms} Office Rooms</span>
                                                                                 <span><i className="icon-safety-shower"></i>{p.bathrooms} Bathroom</span>
                                                                             </div>
-                                                                            <div className="property_meta transparent bottom30 listing-icon-container">
+                                                                            <div className="property_meta transparent  listing-icon-container">
                                                                                 <span className="listing-icon">
                                                                                     <span>FrontYard</span>
                                                                                     {p.frontyard ? <span className="font-wingdings color-green" >&#252;</span> : <span className="font-wingdings color-red" >&#x2716;</span>}
@@ -280,7 +280,12 @@ export const ViewListing = (props) => {
                                                                                 </span>
                                                                                 <span><i className="icon-garage"></i>{p.garages} Garage</span>
                                                                             </div>
-                                                                            <div className="favroute clearfix">
+                                                                            <div className="property_meta transparent listing-icon-container bottom30" >
+                                                                                    <span><i className="icon-select-an-objecto-tool"></i>{p.area} sq ft</span>
+                                                                                    <span><i className="icon-safety-shower"></i>${p.price}</span>
+                                                                                    <span>{p.postedOnStr}</span>
+                                                                                </div>
+                                                                                <div className="favroute clearfix">
                                                                                 <p className="pull-md-left"><i className="icon-calendar2"></i> {vm.daysAgo} Days ago </p>
                                                                                 {/*<ul className="pull-right">*/}
                                                                                 {/*    <li><a href="#."><i className="icon-like"></i></a></li>*/}

@@ -218,3 +218,8 @@ MuiOutlinedInput-input
     justify-content: space-between;
 }
 /*pagination*/
+
+.price-container{
+    display:flex;
+    gap:5px;
+}
