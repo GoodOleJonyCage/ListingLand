@@ -250,7 +250,7 @@ export const ViewListing = (props) => {
                                                                 <div className="property_item heading_space">
                                                                     <a data-fancybox="images" data-type="image" data-src="#">
                                                                         <div className="image">
-                                                                            <img src={p.images.length > 0 ? p.images[0].imageSrc : "images/listing1.jpg"} alt="latest property" className="img-responsive " />
+                                                                        <img src={p.images.length > 0 ? p.images[0].imageSrc : "images/no-image-available.jpeg"} alt="latest property" className="img-responsive " />
                                                                             <div className="price clearfix">
                                                                                 <span className="tag pull-right">${p.price}</span>
                                                                             </div>

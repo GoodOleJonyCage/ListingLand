@@ -1,4 +1,44 @@
-﻿
+﻿ 
+export const GetSearchVM = async () => {
+
+    let response = await fetch(`listing/getsearchvm`, {
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            //'Authorization': "Bearer " + getJwtToken()
+        },
+        //method: 'POST',
+        //body: JSON.stringify({ quizid: quizid }),
+    });
+
+    if (response.ok) {
+        const data = await response.json();
+        return data;
+    }
+
+    throw response;
+}
+
+export const GetSearchResults = async (_vm) => {
+
+    let response = await fetch(`listing/getsearchresults`, {
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            //'Authorization': "Bearer " + getJwtToken()
+        },
+        method: 'POST',
+        body: JSON.stringify({ vm: _vm }),
+    });
+
+    if (response.ok) {
+        const data = await response.json();
+        return data;
+    }
+
+    throw response;
+}
+
 export const UploadFiles = async (data) => {
 
     let response = await fetch(`listing/uploadfiles`, {

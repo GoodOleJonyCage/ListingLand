@@ -11,13 +11,13 @@ export const ListingItem = (props) => {
                 </div>
                 <div className="image">
                     <a data-fancybox="images" data-type="image" data-src="#"  >
-                        <img src={props.listing.images.length > 0 ? props.listing.images[0].imageSrc : "images/props.listing1.jpg"} alt="latest property" className="img-responsive " />
+                        <img src={props.listing.images.length > 0 ? props.listing.images[0].imageSrc : "images/no-image-available.jpeg"} alt="latest property" className="img-responsive " />
                     </a> 
                     <div className="price clearfix">
                         <span className="tag">For Sale</span>
                     </div>
                 </div>
-                <a href={'/viewprops.listing?props.listingid=' + props.listing.listingID}>
+                <a href={'/viewlisting?listingid=' + props.listing.listingID}>
                     <div className="proerty_content">
                         <div className="property_meta props.listing-icon-container">
                             <span><i className="icon-select-an-objecto-tool"></i>{props.listing.area} sq ft</span>

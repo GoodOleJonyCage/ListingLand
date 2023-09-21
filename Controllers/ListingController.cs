@@ -714,5 +714,41 @@ namespace ListingLand.Controllers
             return Ok(listings);
         }
 
+
+        [HttpGet]
+        [Route("getsearchvm")]
+        public IActionResult GetSearchVm()
+        {
+            var listings = new List<ViewModels.Listing>();
+
+            //try
+            //{
+            //    listings = LoadListings();
+            //}
+            //catch (Exception exc)
+            //{
+            //    return BadRequest(exc.Message);
+            //}
+
+            return Ok(listings);
+        }
+        
+        [HttpPost]
+        [Route("getsearchresults")]
+        public IActionResult GetSearchReults()
+        {
+            var listings = new List<ViewModels.Listing>();
+
+            //try
+            //{
+            //    listings = LoadListings();
+            //}
+            //catch (Exception exc)
+            //{
+            //    return BadRequest(exc.Message);
+            //}
+
+            return Ok(listings);
+        }
     }
 }
