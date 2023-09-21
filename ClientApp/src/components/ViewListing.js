@@ -2,7 +2,7 @@
 import { GetListing,GetListings } from '../Services/Services'
 import { useSearchParams } from 'react-router-dom'
 import { Loading } from './Loading'
-import Moment from 'react-moment';
+/*import Moment from 'react-moment';*/
 //import { useNavigate } from 'react-router-dom';
 
 export const ViewListing = (props) => {

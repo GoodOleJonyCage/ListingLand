@@ -198,3 +198,24 @@ MuiOutlinedInput-input
     width: 100%;
     height: 100%;
 }
+
+
+/*pagination*/
+.bottom-pager-container ul {
+    list-style: none;
+    display: flex;
+    margin: 0px 20px;
+}
+
+.bottom-pager-container li {
+    margin-right: 0.3em;
+    color: white;
+    user-select: none;
+    cursor: pointer;
+}
+
+.bottom-pager-container {
+    display: flex;
+    justify-content: space-between;
+}
+/*pagination*/

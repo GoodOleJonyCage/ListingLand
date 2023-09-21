@@ -1,0 +1,53 @@
+﻿import { useState } from 'react'
+import { ListingItem } from './ListingItem'
+
+export const PagedListings = (props) => {
+
+
+    //reference
+    //https://stackoverflow.com/questions/40232847/how-to-implement-pagination-in-react
+    //console.log(props);
+    const [currentPage, setcurrentPage] = useState(1);
+    const [itemsPerPage, settodosPerPage] = useState(10);
+
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentTodos = props.listings.slice(indexOfFirstItem, indexOfLastItem);
+
+    // Logic for displaying page numbers
+    const pageNumbers = [];
+    for (let i = 1; i <= Math.ceil(props.listings.length / itemsPerPage); i++) {
+        pageNumbers.push(i);
+    }
+
+    const renderPageNumbers = pageNumbers.map(number => {
+        return (
+            <li
+                key={number}
+                id={number}
+                onClick={(e) => { /*console.log(e.target); */setcurrentPage(Number(e.target.id)) }}>
+                {number}
+            </li>
+        );
+    });
+
+    return <>
+        {
+            currentTodos.map((listing, index) => {
+                return <ListingItem listing={listing} key={index} index={index}></ListingItem>
+            })
+        }
+
+        <div className="clearfix"></div>
+        <div className="padding_bottom text-center bottom-pager-container"> 
+            <ul className="pager2">
+                {renderPageNumbers}
+            </ul>
+            <div>
+                Page {currentPage}
+            </div>
+        </div>
+ 
+    </>
+
+}
