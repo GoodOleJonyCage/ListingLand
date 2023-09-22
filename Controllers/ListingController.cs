@@ -68,6 +68,14 @@ namespace ListingLand.Controllers
             }
 
             //location
+            if(vm.Location.Country.ID > 0 )
+                lst = lst.Where(c => c.c.Id == vm.Location.Country.ID).ToList();
+
+            if (vm.Location.Region.ID > 0)
+                lst = lst.Where(r => r.r.Id == vm.Location.Region.ID).ToList();
+
+            if (vm.Location.City.ID > 0)
+                lst = lst.Where(ci => ci.ci.Id == vm.Location.City.ID).ToList();
 
             lst.ForEach(listingEntry =>
             {
