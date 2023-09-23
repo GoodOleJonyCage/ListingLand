@@ -1,4 +1,61 @@
-﻿ 
+﻿export const LoginUser = async (_uname,_pwd) => {
+
+    let response = await fetch(`user/loginuser`, {
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            //'Authorization': "Bearer " + getJwtToken()
+        },
+        method: 'POST',
+        body: JSON.stringify({
+            username: _uname,
+            password:_pwd
+        })
+    });
+
+    if (response.ok) {
+        const data = await response.json();
+        return data;
+    }
+
+    throw response;
+}
+
+export const GetInitiazledUser = async () => {
+
+    let response = await fetch(`user/getinitializeduser`, {
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            //'Authorization': "Bearer " + getJwtToken()
+        },
+        //method: 'POST',
+        //body: JSON.stringify({ quizid: quizid }),
+    });
+
+    if (response.ok) {
+        const data = await response.json();
+        return data;
+    }
+
+    throw response;
+}
+
+export const RegisterUser = async (data) => {
+
+    let response = await fetch(`user/registeruser`, {
+        //headers: {
+        //    "Content-Type": "multipart/form-data"
+        //},
+        method: 'POST',
+        body: data
+    });
+    if (response.ok) {
+        return true;
+    }
+    throw response;
+}
+
 export const GetSearchVM = async () => {
 
     let response = await fetch(`listing/getsearchvm`, {

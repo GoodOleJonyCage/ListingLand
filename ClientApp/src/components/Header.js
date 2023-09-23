@@ -28,7 +28,7 @@ export const Header = () => {
                                 <li><a href="submit_property.html"><i className="icon-icons215"></i>Submit Property</a></li>
                                 <li><a href="my_properties.html"><i className="icon-icons215"></i>My Property</a></li>
                                 <li><a href="profile.html"><i className="icon-icons230"></i>Profile</a></li>
-                                <li><a href="login.html"><i className="icon-icons179"></i>Login / Register</a></li>
+                                <li><a href="/login"><i className="icon-icons179"></i>Login / Register</a></li>
                             </ul>
                         </div>
                     </div>

@@ -4,6 +4,8 @@ import { Home } from "./components/Home";
 import { NewListingPage } from "./Pages/NewListingPage";
 import { ViewListingPage } from "./Pages/ViewListingPage";
 import { ViewListingsPage } from "./Pages/ViewListingsPage";
+import { LoginPage } from "./Pages/LoginPage";
+
 
 const AppRoutes = [
     {
@@ -29,6 +31,10 @@ const AppRoutes = [
     {
         path: '/viewlistings',
         element: <ViewListingsPage />
+    },    
+    {
+        path: '/login',
+        element: <LoginPage />
     },    
 
 ];
