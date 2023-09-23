@@ -4,7 +4,11 @@ using ListingLand.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 namespace ListingLand.Controllers
 {
@@ -69,32 +73,36 @@ namespace ListingLand.Controllers
                             }
                         }
                     }
-                     
+
+                    if( _db.Agents.Any(u => u.Email == vm.EmailAddress))
+                        return BadRequest("Username already exists");
+
                     //save the file
-                    //foreach (var file in files)
-                    //{
-                    //    if (file.Length > 0)
-                    //    {
-                    //        #region add image to db
-                    //        using (MemoryStream ms = new MemoryStream())
-                    //        {
-                    //            file.CopyTo(ms);
+                    foreach (var file in files)
+                    {
+                        if (file.Length > 0)
+                        {
+                            #region add image to db
+                            using (MemoryStream ms = new MemoryStream())
+                            {
+                                file.CopyTo(ms);
+                                _db.Agents.Add(new Agent()
+                                {
+                                    Email = vm.EmailAddress,
+                                    Name = vm.Name,
+                                    Password = vm.Password,
+                                    Telephone = vm.Telephone,
+                                    Pic = ms.ToArray()
+                                });
+                                _db.SaveChanges();
 
-                    //            _db.ListingPics.Add(new ListingPic()
-                    //            {
-                    //                //ListingId = listingid,
-                    //                Pic = ms.ToArray()
-                    //            });
+                                ms.Close();
+                                ms.Dispose();
 
-                    //            _db.SaveChanges();
-
-                    //            ms.Close();
-                    //            ms.Dispose();
-
-                    //        }
-                    //        #endregion
-                    //    }
-                    //}
+                            }
+                            #endregion
+                        }
+                    }
                 }
                 catch (Exception exc)
                 {
@@ -113,6 +121,8 @@ namespace ListingLand.Controllers
         [Route("loginuser")]
         public ActionResult LoginUser([FromBody] System.Text.Json.JsonElement param)
         {
+           ViewModels.User user = new User();
+            
            var username =  param.GetProperty("username").ToString();
            var password = param.GetProperty("password").ToString();
 
@@ -122,7 +132,46 @@ namespace ListingLand.Controllers
             if (string.IsNullOrEmpty(password))
                 return BadRequest("Password required");
 
-            return Ok("Uploaded");
+            var userDB = _db.Agents.Where(u => u.Email == username && u.Password == password).SingleOrDefault();
+            if(userDB != null)
+            {
+                user.EmailAddress = userDB.Email;
+                user.Telephone = userDB.Telephone;
+                user.Name = userDB.Name;
+                user.Token = GenerateToken();
+                user.Image = Helpers.Db_Image_Helper.Get_Db_Image(userDB.Pic);
+                
+                return Ok(user);
+            }
+            else
+            {
+                return BadRequest("Invalid Username/password");
+            }
         }
+
+        private string GenerateToken()
+        {
+            return "12345";
+        }
+
+        //private string GenerateToken(Models.User user)
+        //{
+        //    var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
+        //    var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+        //    var claims = new[]
+        //    {
+        //        new Claim(ClaimTypes.NameIdentifier,user.Username),
+        //        new Claim(ClaimTypes.Role,(user.IsAdmin.HasValue ? user.IsAdmin.Value:false) ? roleAdmin : roleUser)
+        //    };
+        //    var token = new JwtSecurityToken(_config["Jwt:Issuer"],
+        //        _config["Jwt:Audience"],
+        //        claims,
+        //        expires: DateTime.Now.AddMinutes(double.Parse(_config["Timeout"])),
+        //        signingCredentials: credentials);
+
+
+        //    return new JwtSecurityTokenHandler().WriteToken(token);
+
+        //}
     }
 }

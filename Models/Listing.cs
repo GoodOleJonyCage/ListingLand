@@ -33,7 +33,11 @@ public partial class Listing
 
     public DateTime? PostedOn { get; set; }
 
+    public int? PostedBy { get; set; }
+
     public virtual ICollection<ListingAttribute> ListingAttributes { get; set; } = new List<ListingAttribute>();
 
     public virtual ICollection<ListingPic> ListingPics { get; set; } = new List<ListingPic>();
+
+    public virtual Agent? PostedByNavigation { get; set; }
 }

@@ -15,6 +15,8 @@ public partial class ListingLandContext : DbContext
     {
     }
 
+    public virtual DbSet<Agent> Agents { get; set; }
+
     public virtual DbSet<Attribute> Attributes { get; set; }
 
     public virtual DbSet<AttributeSection> AttributeSections { get; set; }
@@ -43,6 +45,25 @@ public partial class ListingLandContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<Agent>(entity =>
+        {
+            entity.ToTable("Agent");
+
+            entity.Property(e => e.Id).HasColumnName("ID");
+            entity.Property(e => e.Email)
+                .HasMaxLength(500)
+                .IsUnicode(false);
+            entity.Property(e => e.Name)
+                .HasMaxLength(500)
+                .IsUnicode(false);
+            entity.Property(e => e.Password)
+                .HasMaxLength(500)
+                .IsUnicode(false);
+            entity.Property(e => e.Telephone)
+                .HasMaxLength(500)
+                .IsUnicode(false);
+        });
+
         modelBuilder.Entity<Attribute>(entity =>
         {
             entity.ToTable("Attribute");
@@ -152,6 +173,10 @@ public partial class ListingLandContext : DbContext
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
             entity.Property(e => e.RegionId).HasColumnName("RegionID");
+
+            entity.HasOne(d => d.PostedByNavigation).WithMany(p => p.Listings)
+                .HasForeignKey(d => d.PostedBy)
+                .HasConstraintName("FK_Listing_Agent");
         });
 
         modelBuilder.Entity<ListingAttribute>(entity =>

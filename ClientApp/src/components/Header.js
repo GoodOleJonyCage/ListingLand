@@ -1,9 +1,11 @@
 ﻿import { useEffect } from 'react'
 //import { useNavigate } from 'react-router-dom';
+import { UserStore } from '../Store/UserStore'
 
 export const Header = () => {
 
     //const navigate = useNavigate();
+    const { getUsername, clearToken } = UserStore();
 
     useEffect(() => {
          
@@ -27,8 +29,14 @@ export const Header = () => {
                                 <li><a href="favorite_properties.html"><i className="icon-icons43"></i>Favorites</a></li>
                                 <li><a href="submit_property.html"><i className="icon-icons215"></i>Submit Property</a></li>
                                 <li><a href="my_properties.html"><i className="icon-icons215"></i>My Property</a></li>
-                                <li><a href="profile.html"><i className="icon-icons230"></i>Profile</a></li>
-                                <li><a href="/login"><i className="icon-icons179"></i>Login / Register</a></li>
+                                <li>
+                                    {
+                                        getUsername() === null ?
+                                            <a href="/login"><i className="icon-icons179"></i>Login / Register</a> :
+                                            <a href="/profile"><i className="icon-icons230"></i>{getUsername()}</a>
+                                    }
+                                </li>
+                                {getUsername() !== null ? <li> <a href="/logout">Logout</a></li> : <></>}
                             </ul>
                         </div>
                     </div>

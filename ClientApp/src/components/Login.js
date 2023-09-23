@@ -1,8 +1,13 @@
 ﻿import { useState, useEffect } from 'react'
 import { Loading } from './Loading'
 import { GetInitiazledUser, RegisterUser, LoginUser } from '../Services/Services'
+import { UserStore } from '../Store/UserStore'
+import { useNavigate } from 'react-router-dom';
 
 export const Login = () => {
+
+    const { saveUsername, saveToken } = UserStore();
+    const navigate = useNavigate();
 
     const Register = () => {
 
@@ -144,7 +149,11 @@ export const Login = () => {
                         onClick={async (e) => {
                             e.preventDefault();
                             try {
-                                const token = await LoginUser(username, password);
+                                const user = await LoginUser(username, password);
+                                //console.log(user);
+                                saveToken(user.token);
+                                saveUsername(user.emailAddress);
+                                navigate('/home')
                                 //redirect after saving token
                             } catch (exc) {
                                exc.json().then(error => { seterror (error)});

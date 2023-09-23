@@ -5,11 +5,16 @@ import { NewListingPage } from "./Pages/NewListingPage";
 import { ViewListingPage } from "./Pages/ViewListingPage";
 import { ViewListingsPage } from "./Pages/ViewListingsPage";
 import { LoginPage } from "./Pages/LoginPage";
+import { LogoutPage } from "./Pages/LogoutPage";
 
 
 const AppRoutes = [
     {
         index: true,
+        element: <Home />
+    },
+    {
+        path: '/home',
         element: <Home />
     },
     {
@@ -35,7 +40,11 @@ const AppRoutes = [
     {
         path: '/login',
         element: <LoginPage />
-    },    
+    },
+    {
+        path: '/logout',
+        element: <LogoutPage />
+    },
 
 ];
 
