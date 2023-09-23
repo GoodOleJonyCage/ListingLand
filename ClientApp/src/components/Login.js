@@ -4,7 +4,7 @@ import { GetInitiazledUser, RegisterUser, LoginUser } from '../Services/Services
 import { UserStore } from '../Store/UserStore'
 import { useNavigate } from 'react-router-dom';
 
-export const Login = () => {
+export const Login = () => { 
 
     const { saveUsername, saveToken } = UserStore();
     const navigate = useNavigate();

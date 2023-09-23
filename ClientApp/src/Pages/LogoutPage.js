@@ -10,7 +10,7 @@ export const LogoutPage = () => {
     useEffect(() => {
 
         clearToken();
-        navigate('/home');
+        navigate('/home'); 
 
     }, []);
  

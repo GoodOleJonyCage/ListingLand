@@ -34,7 +34,7 @@ namespace ListingLand.Controllers
 
 
         [HttpPost]
-        [Route("registeruser")]
+        [Route("registeruser")] 
         public ActionResult RegisterUser(List<IFormFile> files)
         {
             var vm = JsonConvert.DeserializeObject<ViewModels.User>(Request.Form["vm"][0].ToString());
