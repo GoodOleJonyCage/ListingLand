@@ -8,10 +8,8 @@ export const Search = (props) => {
     const [error, seterror] = useState('');
 
     const loadData = async () => {
-
         const vm = await GetSearchVM();
         setvm(vm);
-        
     }
 
     useEffect(() => {
@@ -186,12 +184,12 @@ export const Search = (props) => {
                                     vm.minBaths = document.getElementById('sel-baths').value;
                                     try {
                                         seterror('');
-                                        props.setloading(true);
+                                        props.setloaded(false);
                                         const listings = await GetSearchResults(vm);
-                                        props.setloading(false);
+                                        props.setloaded(true);
                                         props.setlistings(listings);
                                     } catch (e) {
-                                        props.setloading(false);
+                                        //props.setloaded(false);
                                         e.json().then(error => { seterror(error); });
                                     }
 

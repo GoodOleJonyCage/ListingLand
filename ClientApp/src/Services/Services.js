@@ -1,4 +1,27 @@
-﻿export const LoginUser = async (_uname,_pwd) => {
+﻿
+export const GetUserInfo = async (_username) => {
+
+    let response = await fetch(`user/getuser`, {
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            //'Authorization': "Bearer " + getJwtToken()
+        },
+        method: 'POST',
+        body: JSON.stringify({
+            username: _username 
+        })
+    });
+
+    if (response.ok) {
+        const data = await response.json();
+        return data;
+    }
+
+    throw response;
+}
+
+export const LoginUser = async (_uname, _pwd) => {
 
     let response = await fetch(`user/loginuser`, {
         headers: {

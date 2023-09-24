@@ -242,3 +242,6 @@ MuiOutlinedInput-input
     letter-spacing:1px;
     text-transform:uppercase;
  }
+.register-textarea textarea {
+    width: 100%;
+}

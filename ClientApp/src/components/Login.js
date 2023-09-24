@@ -66,6 +66,11 @@ export const Login = () => {
                                     onChange={(e) => { vm.telephone = e.target.value; }}
                                     type="text" className="keyword-input" placeholder="Telephone" />
                             </div>
+                            <div className="single-query col-sm-12 form-group register-textarea">
+                                <textarea
+                                    onChange={(e) => { vm.about = e.target.value; }}
+                                    type="text" className="keyword-input" placeholder="About" />
+                            </div>
                             <div>
                                 <input type="file" id="files" name="files"
                                     onChange={onImageChange} className="btn-blue border_radius margin40 filetype file-uploader" />

@@ -7,17 +7,17 @@ import { Search } from './Search'
 export const ViewListings = () => {
 
     const [listings, setlistings] = useState([]);
-    const [loading, setloading] = useState(false);
+    const [loaded, setloaded] = useState(false);
 
     const loadData = async () => {
 
-        setloading(true);
+        setloaded(false);
 
         const listings = await GetListings();
         setlistings(listings);
         //console.log(listings);
 
-        setloading(false);
+        setloaded(true);
 
         let script = document.createElement("script");
         script.src = "js/functions.js";
@@ -59,7 +59,7 @@ export const ViewListings = () => {
                         </div>
                         <div className="row">
                             {
-                                loading ? <Loading></Loading> :
+                                !loaded && listings.length === 0 ? <Loading></Loading> :
                                     listings.length === 0 ? <div className="highlight-error">No Records found</div> :
                                         <PagedListings  listings={listings}></PagedListings>
                             }
@@ -72,9 +72,10 @@ export const ViewListings = () => {
                         {/*    </ul>*/}
                         {/*</div>*/}
                     </div>
-                    <Search setloading={setloading} setlistings={setlistings}></Search>
+                    <Search setloaded={setloaded} setlistings={setlistings}></Search>
                 </div>
             </div>
-        </section>
+            </section>
+        
     </>
 }

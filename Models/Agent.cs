@@ -17,5 +17,7 @@ public partial class Agent
 
     public byte[]? Pic { get; set; }
 
+    public string? About { get; set; }
+
     public virtual ICollection<Listing> Listings { get; set; } = new List<Listing>();
 }

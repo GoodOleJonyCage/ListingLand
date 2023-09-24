@@ -50,6 +50,9 @@ public partial class ListingLandContext : DbContext
             entity.ToTable("Agent");
 
             entity.Property(e => e.Id).HasColumnName("ID");
+            entity.Property(e => e.About)
+                .HasMaxLength(1000)
+                .IsUnicode(false);
             entity.Property(e => e.Email)
                 .HasMaxLength(500)
                 .IsUnicode(false);

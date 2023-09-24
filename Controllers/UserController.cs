@@ -18,10 +18,11 @@ namespace ListingLand.Controllers
     public class UserController : Controller
     {
         private ListingLandContext _db;
-        public UserController(ListingLandContext db)
+        private readonly IConfiguration _config;
+        public UserController(ListingLandContext db, IConfiguration config)
         {
             _db = db;
-
+            _config = config;
         }
 
         [HttpGet]
@@ -92,6 +93,7 @@ namespace ListingLand.Controllers
                                     Name = vm.Name,
                                     Password = vm.Password,
                                     Telephone = vm.Telephone,
+                                    About = vm.About,
                                     Pic = ms.ToArray()
                                 });
                                 _db.SaveChanges();
@@ -138,7 +140,7 @@ namespace ListingLand.Controllers
                 user.EmailAddress = userDB.Email;
                 user.Telephone = userDB.Telephone;
                 user.Name = userDB.Name;
-                user.Token = GenerateToken();
+                user.Token = GenerateToken(user);
                 user.Image = Helpers.Db_Image_Helper.Get_Db_Image(userDB.Pic);
                 
                 return Ok(user);
@@ -148,30 +150,53 @@ namespace ListingLand.Controllers
                 return BadRequest("Invalid Username/password");
             }
         }
+        
 
-        private string GenerateToken()
+        [HttpPost]
+        [Route("getuser")]
+        public ActionResult GetUser([FromBody] System.Text.Json.JsonElement param)
         {
-            return "12345";
+            ViewModels.User user = new User();
+
+            var username = param.GetProperty("username").ToString();
+            
+            if (string.IsNullOrEmpty(username))
+                return BadRequest("Username required");
+
+            
+            var userDB = _db.Agents.Where(u => u.Email == username ).SingleOrDefault();
+            if (userDB != null)
+            {
+                user.EmailAddress = userDB.Email;
+                user.Telephone = userDB.Telephone;
+                user.Name = userDB.Name;
+                user.About = userDB.About;
+                user.Image = Helpers.Db_Image_Helper.Get_Db_Image(userDB.Pic);
+                return Ok(user);
+            }
+            else
+            {
+                return BadRequest("User Not Found");
+            }
         }
 
-        //private string GenerateToken(Models.User user)
-        //{
-        //    var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
-        //    var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
-        //    var claims = new[]
-        //    {
-        //        new Claim(ClaimTypes.NameIdentifier,user.Username),
-        //        new Claim(ClaimTypes.Role,(user.IsAdmin.HasValue ? user.IsAdmin.Value:false) ? roleAdmin : roleUser)
-        //    };
-        //    var token = new JwtSecurityToken(_config["Jwt:Issuer"],
-        //        _config["Jwt:Audience"],
-        //        claims,
-        //        expires: DateTime.Now.AddMinutes(double.Parse(_config["Timeout"])),
-        //        signingCredentials: credentials);
+        private string GenerateToken(ViewModels.User user)
+        {
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
+            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+            var claims = new[]
+            {
+                new Claim(ClaimTypes.NameIdentifier,user.EmailAddress),
+                //new Claim(ClaimTypes.Role,(user.IsAdmin.HasValue ? user.IsAdmin.Value:false) ? roleAdmin : roleUser)
+            };
+            var token = new JwtSecurityToken(_config["Jwt:Issuer"],
+                _config["Jwt:Audience"],
+                claims,
+                expires: DateTime.Now.AddMinutes(double.Parse(_config["Timeout"])),
+                signingCredentials: credentials);
 
 
-        //    return new JwtSecurityTokenHandler().WriteToken(token);
-
-        //}
+            return new JwtSecurityTokenHandler().WriteToken(token);
+        }
     }
 }
