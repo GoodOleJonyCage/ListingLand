@@ -170,6 +170,8 @@ export const NewListing = () => {
 
     const CreateListingForm = () => {
 
+        const { getUsername } = UserStore();
+
         return <>
             <div className="row">
                 <div className="col-sm-12">
@@ -470,6 +472,7 @@ export const NewListing = () => {
                         onClick={async (e) => {
                             e.preventDefault();
                             try {
+                                vm.postedBy = getUsername();
                                 const newvm = await CreateListing(vm)
                                 setvm(newvm);
                                 if (newvm.isValid) {

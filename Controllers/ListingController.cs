@@ -445,6 +445,15 @@ namespace ListingLand.Controllers
             return listing;
         }
 
+        private int GetUserID(string username)
+        {
+           var user =  _db.Agents.Where(a => a.Email == username).SingleOrDefault();
+            if (user != null)
+                return user.Id;
+            else
+                throw new Exception("User Not found");
+        }
+
         [HttpGet]
         [Route("getnewlisting")]
         public IActionResult NewListing()
@@ -612,7 +621,8 @@ namespace ListingLand.Controllers
                             OfficeRooms = Int32.Parse(vm?.OfficeRooms),
                             Garages = Int32.Parse(vm?.Garages),
                             Backyard = vm?.Backyard,
-                            Frontyard = vm?.Frontyard
+                            Frontyard = vm?.Frontyard,
+                            PostedBy = GetUserID(vm.PostedBy)
                         });
                         _db.SaveChanges();
                         #endregion
@@ -800,7 +810,6 @@ namespace ListingLand.Controllers
 
             return Ok(listings);
         }
-
 
         [HttpGet]
         [Route("getsearchvm")]
