@@ -1,5 +1,5 @@
 ﻿import { useState, useEffect } from 'react'
-import { GetNewListing, CreateListing, UploadFiles, GetUserInfo } from '../Services/Services'
+import { GetNewListing, CreateListing, UploadFiles, GetUserInfo, GetListingsByUserID } from '../Services/Services'
 import { Loading } from './Loading'
 import { LocationLocator } from './LocationLocator'
 import { UserStore } from '../Store/UserStore'
@@ -575,105 +575,97 @@ export const NewListing = () => {
                                 </div>
                             </div>
                         </div>
-                        <div className="container">
-                            <div className="row">
-                                <div className="col-md-5 col-sm-6 col-xs-12 profile-form margin40">
-                                    <h3 className="bottom30 margin40">My Social Network</h3>
-                                    <div className="row">
-                                        <form className="callus">
-                                            <div className="col-sm-4">
-                                                <div className="single-query">
-                                                    <label>Facebook:</label>
-                                                </div>
-                                            </div>
-                                            <div className="col-sm-8">
-                                                <div className="single-query form-group">
-                                                    <input type="text" placeholder="http://facebook.com" className="keyword-input" />
-                                                </div>
-                                            </div>
-                                            <div className="col-sm-4">
-                                                <div className="single-query">
-                                                    <label>Twitter:</label>
-                                                </div>
-                                            </div>
-                                            <div className="col-sm-8">
-                                                <div className="single-query form-group">
-                                                    <input type="text" placeholder="http://twitter.com" className="keyword-input" />
-                                                </div>
-                                            </div>
-                                            <div className="col-sm-4">
-                                                <div className="single-query">
-                                                    <label>Google Plus:</label>
-                                                </div>
-                                            </div>
-                                            <div className="col-sm-8">
-                                                <div className="single-query form-group">
-                                                    <input type="text" placeholder="http://google-plus.com" className="keyword-input" />
-                                                </div>
-                                            </div>
-                                            <div className="col-sm-4">
-                                                <div className="single-query">
-                                                    <label>Linkedin:</label>
-                                                </div>
-                                            </div>
-                                            <div className="col-sm-8">
-                                                <div className="single-query form-group">
-                                                    <input type="text" placeholder="http://linkedin.com" className="keyword-input" />
-                                                </div>
-                                            </div>
-                                            <div className="col-md-12 col-sm-12 col-xs-12 text-right">
-                                                <a className="btn-blue border_radius" href="#.">Save Changes</a>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-                                <div className="col-md-2 hidden-xs"></div>
-                                <div className="col-md-5 col-sm-6 col-xs-12 profile-form margin40">
-                                    <h3 className=" bottom30 margin40">Change Your Password</h3>
-                                    <div className="row">
-                                        <form className="callus">
-                                            <div className="col-sm-4">
-                                                <div className="single-query">
-                                                    <label>Current Password:</label>
-                                                </div>
-                                            </div>
-                                            <div className="col-sm-8">
-                                                <div className="single-query form-group">
-                                                    <input type="password" className="keyword-input" />
-                                                </div>
-                                            </div>
-                                            <div className="col-sm-4">
-                                                <div className="single-query">
-                                                    <label>New Password:</label>
-                                                </div>
-                                            </div>
-                                            <div className="col-sm-8">
-                                                <div className="single-query form-group">
-                                                    <input type="password" className="keyword-input" />
-                                                </div>
-                                            </div>
-                                            <div className="col-sm-4">
-                                                <div className="single-query">
-                                                    <label>Confirm Password:</label>
-                                                </div>
-                                            </div>
-                                            <div className="col-sm-8">
-                                                <div className="single-query form-group">
-                                                    <input type="password" className="keyword-input" />
-                                                </div>
-                                            </div>
-                                            <div className="col-sm-12 text-right">
-                                                <a className="btn-blue border_radius" href="#.">Save Changes</a>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                         
                     </section>
             }
         </>
 
+    }
+
+    const PropertyTab = () => {
+
+        const [editlistingid, seteditlistingid] = useState(-1);
+        const {getUsername} = UserStore();
+
+        const PropertyList = () => {
+
+            const [listings, setlistings] = useState([]);
+
+            const loadData = async () => {
+
+                const vm = await GetListingsByUserID(getUsername());
+                setlistings(vm);
+                console.log(vm);
+            }
+
+            useEffect(() => {
+                loadData();
+                console.log('PropertyList');
+            }, []);
+
+            return <>
+                <section id="agent-2-peperty" className="my-pro padding">
+                    <div className=" list-t-border">
+                        {
+                            listings.map((listing, index) => {
+                                return <div key={index} className="row bg-hover">
+                                    <div className="my-pro-list">
+                                        <div className="col-md-2 col-sm-2 col-xs-12">
+                                            <img src={listing.images[0].imageSrc} alt="image" />
+                                        </div>
+                                        <div className="col-md-8 col-sm-8 col-xs-12">
+                                            <div className="feature-p-text">
+                                                <h4>{listing.name }</h4>
+                                                <p>{listing.location.city.name},{listing.location.region.name} {listing.location.country.name}</p>
+                                                <span><b>Status:</b>  For Sale</span><br />
+                                                <div className="button-my-pro-list">
+                                                    <a href="#.">${listing.price}</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="col-md-2 col-sm-2 col-xs-12">
+                                            <div className="select-pro-list">
+                                                <a
+                                                    onClick={(e) => {
+                                                        e.preventDefault();
+                                                        seteditlistingid(listing.listingID);
+                                                    }}
+                                                    href="#"><i className="icon-pen2"></i></a>
+                                                <a href="#"><i className="icon-cross"></i></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            })
+                        }
+                    </div>
+                    <div className="container">
+                        <div className="row padding_top">
+                            <div className="col-md-12">
+                                <ul className="pager">
+                                    <li><a href="#">1</a></li>
+                                    <li className="active"><a href="#">2</a></li>
+                                    <li><a href="#">3</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </>
+        }
+        const EditProperty = () => {
+
+            useEffect(() => {
+                console.log('EditProperty');
+            }, []);
+
+            return <>
+                <div>You Clicked on {editlistingid}</div>
+                <button onClick={(e) => { seteditlistingid(-1) }}>Cancel</button>  
+            </>
+        }
+
+        return editlistingid === -1 ? <PropertyList /> : <EditProperty />
     }
 
     return <> {
@@ -728,7 +720,7 @@ export const NewListing = () => {
                     <div className={tab === 1 ? "row show" : "row hide"}>
                         <div className="col-sm-1 col-md-2"></div>
                         <div className="col-sm-10 col-md-8">
-                            Content2
+                            <PropertyTab></PropertyTab>
                         </div>
                         <div className="col-sm-1 col-md-2"></div>
                         <div className="col-sm-4">
@@ -748,15 +740,6 @@ export const NewListing = () => {
                                         )
                                 }
                             </div>
-                        </div>
-                        <div className="col-sm-1 col-md-2"></div>
-                        <div className="col-sm-4">
-                        </div>
-                    </div>
-                    <div className={tab === 4 ? "row show" : "row hide"}>
-                        <div className="col-sm-1 col-md-2"></div>
-                        <div className="col-sm-10 col-md-8">
-                            Content4
                         </div>
                         <div className="col-sm-1 col-md-2"></div>
                         <div className="col-sm-4">

@@ -157,6 +157,52 @@ namespace ListingLand.Controllers
             return listings;
         }
 
+        private List<ViewModels.Listing> LoadListings(int userID)
+        {
+            var listings = new List<ViewModels.Listing>();
+
+            var lst = (from l in _db.Listings
+                       join c in _db.Countries on l.CountryId equals c.Id
+                       join r in _db.Regions on l.RegionId equals r.Id
+                       join ci in _db.Cities on l.CityId equals ci.Id
+                       where l.PostedBy == userID
+                       select new { l, c, r, ci }).ToList();
+
+            lst.ForEach(listingEntry =>
+            {
+                var listing = new ViewModels.Listing();
+
+                listing.ListingID = listingEntry.l.Id;
+                listing.PostedOn = listingEntry.l.PostedOn;
+                listing.PostedOnStr = listingEntry.l.PostedOn.Value.ToString("dd MMM yyyy hh:mm:ss:tt");
+                listing.DaysAgo = (int)(DateTime.Now - listingEntry.l.PostedOn.Value).TotalDays;
+                listing.Name = listingEntry.l.Name;
+                listing.Location.Country.Name = listingEntry.c.Name;
+                listing.Location.Region.Name = listingEntry.r.Name;
+                listing.Location.City.Name = listingEntry.ci.Name;
+                listing.Price = (listingEntry.l.Price ?? 0).ToString();
+                listing.Area = (listingEntry.l.Area ?? 0).ToString();
+                listing.Bedrooms = (listingEntry.l.Bedrooms ?? 0).ToString();
+                listing.Bathrooms = ((listingEntry.l.Bathrooms ?? 0).ToString());
+                listing.OfficeRooms = (listingEntry.l.OfficeRooms ?? 0).ToString();
+                listing.Garages = (listingEntry.l.Garages ?? 0).ToString();
+                listing.Backyard = listingEntry.l.Backyard ?? false;
+                listing.Frontyard = listingEntry.l.Frontyard ?? false;
+
+                listing.Images = _db.ListingPics.Where(l => l.ListingId == listing.ListingID)
+                .Select(l => new ListingImage()
+                {
+                    ImageSrc = Helpers.Db_Image_Helper.Get_Db_Image(l.Pic)
+
+                }).ToList();
+
+                listings.Add(listing);
+
+            });
+
+            return listings;
+        }
+
         private ViewModels.Listing LoadListing(int listingId)
         {
             var listing = new ViewModels.Listing();
@@ -802,6 +848,27 @@ namespace ListingLand.Controllers
             try
             {
                 listings = LoadListings();
+            }
+            catch (Exception exc)
+            {
+                return BadRequest(exc.Message);
+            }
+
+            return Ok(listings);
+        }
+
+        [HttpPost]
+        [Route("getlistingsbyuserid")]
+        public IActionResult GetListingsByUserID([FromBody] System.Text.Json.JsonElement param)
+        {
+            var username =  param.GetProperty("username").ToString();
+            var uerid = GetUserID(username);
+
+            var listings = new List<ViewModels.Listing>();
+
+            try
+            {
+                listings = LoadListings(uerid);
             }
             catch (Exception exc)
             {

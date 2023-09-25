@@ -233,6 +233,24 @@ export const GetListing = async (_listingid) => {
     throw response;
 }
 
+export const GetListingsByUserID = async (_username) => {
+
+    let response = await fetch(`listing/getlistingsbyuserid`, {
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            //'Authorization': "Bearer " + getJwtToken()
+        },
+        method: 'POST',
+        body: JSON.stringify({ username: _username }),
+    });
+    if (response.ok) {
+        const data = await response.json();
+        return data;
+    }
+    throw response;
+}
+
 export const GetListings = async () => {
 
     let response = await fetch(`listing/getlistings`, {
