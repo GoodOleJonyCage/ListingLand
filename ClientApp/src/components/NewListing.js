@@ -1,5 +1,5 @@
 ﻿import { useState, useEffect } from 'react'
-import { GetNewListing, CreateListing, UploadFiles, GetUserInfo, GetListingsByUserID } from '../Services/Services'
+import { GetNewListing, CreateListing, UploadFiles, GetUserInfo, GetListingsByUserID, GetListing, EditListing } from '../Services/Services'
 import { Loading } from './Loading'
 import { LocationLocator } from './LocationLocator'
 import { UserStore } from '../Store/UserStore'
@@ -307,7 +307,7 @@ export const NewListing = () => {
                                 <div className="col-sm-6">
                                     <div className="search-form-group white">
                                         <select
-                                            defaultValue={vm.frontyard}
+                                            defaultValue={vm.backyard}
                                             onChange={(e) => {
                                                 vm.backyard = e.target.value === "1" ? true : false;
                                             }}>
@@ -500,7 +500,7 @@ export const NewListing = () => {
         const loadData = async () => {
             const newvm = await GetUserInfo(getUsername());
             setuser(newvm);
-            console.log(newvm);
+            //console.log(newvm);
         }
 
         useEffect(() => {
@@ -531,7 +531,7 @@ export const NewListing = () => {
                                                 </div>
                                                 <div className="col-sm-8">
                                                     <div className="single-query form-group">
-                                                        <input value={user.name } type="text" placeholder="Bohdan Kononets" className="keyword-input" />
+                                                        <input defaultValue={user.name } type="text" placeholder="Bohdan Kononets" className="keyword-input" />
                                                     </div>
                                                 </div>
                                                 <div className="col-sm-4">
@@ -541,7 +541,7 @@ export const NewListing = () => {
                                                 </div>
                                                 <div className="col-sm-8">
                                                     <div className="single-query form-group">
-                                                        <input value={user.telephone} type="text" placeholder="(+01) 34 56 7890" className="keyword-input" />
+                                                        <input defaultValue={user.telephone} type="text" placeholder="(+01) 34 56 7890" className="keyword-input" />
                                                     </div>
                                                 </div>
                                                 
@@ -552,7 +552,7 @@ export const NewListing = () => {
                                                 </div>
                                                 <div className="col-sm-8">
                                                     <div className="single-query form-group">
-                                                        <input value={user.emailAddress} type="text" placeholder="bohdan@realtyhomes.com" className="keyword-input" />
+                                                        <input defaultValue={user.emailAddress} type="text" placeholder="bohdan@realtyhomes.com" className="keyword-input" />
                                                     </div>
                                                 </div>
                                                 
@@ -563,7 +563,7 @@ export const NewListing = () => {
                                                 </div>
                                                 <div className="col-sm-8">
                                                     <div className="single-query form-group">
-                                                        <textarea value={user.about}  placeholder="Write here somthing about yours" className="form-control"></textarea>
+                                                        <textarea defaultValue={user.about}  placeholder="Write here somthing about yours" className="form-control"></textarea>
                                                     </div>
                                                 </div>
                                                 <div className="col-md-12 col-sm-12 col-xs-12 text-right">
@@ -595,12 +595,12 @@ export const NewListing = () => {
 
                 const vm = await GetListingsByUserID(getUsername());
                 setlistings(vm);
-                console.log(vm);
+                //console.log(vm);
             }
 
             useEffect(() => {
                 loadData();
-                console.log('PropertyList');
+                //console.log('PropertyList');
             }, []);
 
             return <>
@@ -611,7 +611,8 @@ export const NewListing = () => {
                                 return <div key={index} className="row bg-hover">
                                     <div className="my-pro-list">
                                         <div className="col-md-2 col-sm-2 col-xs-12">
-                                            <img src={listing.images[0].imageSrc} alt="image" />
+                                            <img src={
+                                                listing.images.length > 0 ? listing.images[0].imageSrc : "images/no-image-available.jpeg"} alt="image" />
                                         </div>
                                         <div className="col-md-8 col-sm-8 col-xs-12">
                                             <div className="feature-p-text">
@@ -655,13 +656,350 @@ export const NewListing = () => {
         }
         const EditProperty = () => {
 
+            const [editlisting, seteditlisting] = useState(null);
+            const [editlistingerror, seteditlistingerror] = useState('');
+
+            const loadData = async () => {
+                if (editlistingid > -1) {
+                    const listingtoedit = await GetListing(editlistingid);
+                    seteditlisting(listingtoedit);
+                    //console.log(listingtoedit);
+                }
+                else {
+                    seteditlisting(null);
+                }
+            }
+
             useEffect(() => {
-                console.log('EditProperty');
+                loadData();
             }, []);
 
             return <>
-                <div>You Clicked on {editlistingid}</div>
-                <button onClick={(e) => { seteditlistingid(-1) }}>Cancel</button>  
+                {
+                    editlisting === null    ? <></> :
+                        <div className="row">
+                            <div className="col-sm-12">
+                                <div className="search-propertie-filters">
+                                    <div className="container-2">
+                                        <div className="row">
+                                            <div className="col-sm-6">
+                                                <div className="search-form-group white">
+                                                    <label>Name</label>
+                                                    <div className="text-danger">{editlisting.nameError}</div>
+                                                </div>
+                                            </div>
+                                            <div className="col-sm-6">
+                                                <div className="search-form-group white">
+                                                    <input
+                                                        defaultValue={editlisting.name}
+                                                        onChange={(e) => {
+                                                            editlisting.name = e.target.value;
+                                                        }}
+                                                        type="textbox" className="listing-txt-name" />
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div className="row">
+                                            <div className="col-sm-6">
+                                                <div className="search-form-group white">
+                                                    <label>Price</label>
+                                                    <div className="text-danger">{editlisting.priceError}</div>
+                                                </div>
+                                            </div>
+                                            <div className="col-sm-6">
+                                                <div className="search-form-group newlisting-container white">
+                                                    <input
+                                                        defaultValue={editlisting.price}
+                                                        onChange={(e) => {
+                                                            editlisting.price = e.target.value;
+                                                        }}
+                                                        type="textbox" className="listing-txt-name" />$
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="row">
+                                            <div className="col-sm-6">
+                                                <div className="search-form-group white">
+                                                    <label>Area</label>
+                                                    <div className="text-danger">{editlisting.areaError}</div>
+                                                </div>
+                                            </div>
+                                            <div className="col-sm-6">
+                                                <div className="search-form-group newlisting-container white">
+                                                    <input
+                                                        defaultValue={editlisting.area}
+                                                        onChange={(e) => {
+                                                            editlisting.area = e.target.value;
+                                                        }}
+                                                        type="textbox" className="listing-txt-name" />Sqaure Feet
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="row">
+                                            <div className="col-sm-6">
+                                                <div className="search-form-group white">
+                                                    <label>Bedrooms</label>
+                                                    <div className="text-danger">{editlisting.bedroomsError}</div>
+                                                </div>
+                                            </div>
+                                            <div className="col-sm-6">
+                                                <div className="search-form-group white">
+                                                    <input
+                                                        defaultValue={editlisting.bedrooms}
+                                                        onChange={(e) => {
+                                                            editlisting.bedrooms = e.target.value;
+                                                        }}
+                                                        type="textbox" className="listing-txt-name" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="row">
+                                            <div className="col-sm-6">
+                                                <div className="search-form-group white">
+                                                    <label>Bathrooms</label>
+                                                    <div className="text-danger">{editlisting.bathroomsError}</div>
+                                                </div>
+                                            </div>
+                                            <div className="col-sm-6">
+                                                <div className="search-form-group white">
+                                                    <input
+                                                        defaultValue={editlisting.bathrooms}
+                                                        onChange={(e) => {
+                                                            editlisting.bathrooms = e.target.value;
+                                                        }}
+                                                        type="textbox" className="listing-txt-name" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="row">
+                                            <div className="col-sm-6">
+                                                <div className="search-form-group white">
+                                                    <label>Office Rooms</label>
+                                                    <div className="text-danger">{editlisting.officeRoomsError}</div>
+                                                </div>
+                                            </div>
+                                            <div className="col-sm-6">
+                                                <div className="search-form-group white">
+                                                    <input
+                                                        defaultValue={editlisting.officeRooms}
+                                                        onChange={(e) => {
+                                                            editlisting.officeRooms = e.target.value;
+                                                        }}
+                                                        type="textbox" className="listing-txt-name" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="row">
+                                            <div className="col-sm-6">
+                                                <div className="search-form-group white">
+                                                    <label>Garages</label>
+                                                    <div className="text-danger">{editlisting.garagesError}</div>
+                                                </div>
+                                            </div>
+                                            <div className="col-sm-6">
+                                                <div className="search-form-group white">
+                                                    <input
+                                                        defaultValue={editlisting.garages}
+                                                        onChange={(e) => {
+                                                            editlisting.garages = e.target.value;
+                                                        }}
+                                                        type="textbox" className="listing-txt-name" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="row">
+                                            <div className="col-sm-6">
+                                                <div className="search-form-group white">
+                                                    <label>Backyard</label>
+                                                    <div className="text-danger">{editlisting.backyardError}</div>
+                                                </div>
+                                            </div>
+                                            <div className="col-sm-6">
+                                                <div className="search-form-group white">
+                                                    <select
+                                                        defaultValue={editlisting.backyard ?"1":"0"}
+                                                        onChange={(e) => {
+                                                            editlisting.backyard = e.target.value === "1" ? true : false;
+                                                        }}>
+                                                        <option value="0">No</option>
+                                                        <option value="1">Yes</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="row">
+                                            <div className="col-sm-6">
+                                                <div className="search-form-group white">
+                                                    <label>Frontyard</label>
+                                                    <div className="text-danger">{editlisting.frontyardError}</div>
+                                                </div>
+                                            </div>
+                                            <div className="col-sm-6">
+                                                <div className="search-form-group white">
+                                                    <select
+                                                        defaultValue={editlisting.frontyard ? "1" : "0"}
+                                                        onChange={(e) => {
+                                                            editlisting.frontyard = e.target.value === "1" ? true : false;
+                                                        }}>
+                                                        <option value="0">No</option>
+                                                        <option value="1">Yes</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div className="row">
+                                            <div className="col-sm-6">
+                                                <div className="search-form-group white">
+                                                    <label>Location</label>
+                                                    <div className="text-danger">{editlisting.locationError}</div>
+                                                </div>
+                                            </div>
+                                            <div className="col-sm-6">
+                                                <div className="search-form-group white">
+                                                    <LocationLocator location={editlisting.location}></LocationLocator>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {/*Descriptions*/}
+                            <div className="col-sm-12 listing-textarea-container">
+                                {
+                                    editlisting.description.map((attribute, index) => {
+                                        return <div key={index}>
+                                            <h3 className="bottom15 margin40">{attribute.attributename}</h3>
+                                            <textarea id={"textarea" + index}
+                                                defaultValue={attribute.textValue}
+                                                onChange={(e) => {
+                                                    attribute.textValue = e.target.value;
+                                                }}
+                                            ></textarea>
+                                            <span className="text-danger">{attribute.errorMessage}</span>
+                                        </div>
+                                    })
+                                }
+                            </div>
+                            {/*Descriptions*/}
+
+                            {/*Features*/}
+                            <div className="col-sm-12">
+                                <h3 className="bottom15 margin40">{editlisting.features[0].sectionName}</h3>
+                                <div className="search-propertie-filters">
+                                    <div className="container-2">
+                                        <div className="row">
+                                            {
+                                                editlisting.features.map((attribute, index) => {
+                                                    return <div key={index} className="col-md-4 col-sm-4">
+                                                        <div className="listing-checkbox-container white">
+                                                            <input
+                                                                defaultChecked={attribute.selected}
+                                                                onChange={(e) => {
+                                                                    attribute.selected = e.target.checked;
+                                                                }}
+                                                                type="checkbox" name="check-box" />
+                                                            <span>{attribute.attributename}</span>
+                                                        </div>
+                                                    </div>
+                                                })
+                                            }
+                                        </div>
+                                        <div className="row">
+                                            <span className="text-danger">{editlisting.featureError}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {/*Features*/}
+
+                            {/*Summary*/}
+                            <div className="col-sm-12">
+                                <h3 className="bottom15 margin40">{editlisting.quickSummary[0].sectionName}</h3>
+                                <div className="search-propertie-filters">
+                                    <div className="container-2">
+                                        {
+                                            editlisting.quickSummary.map((attribute, index) => {
+                                                return <div className="row" key={index}>
+                                                    {
+                                                        attribute.attributeType === "CheckBox" ?
+                                                            <div key={index} className="">
+                                                                {
+                                                                    attribute.attributeValues.length > 0 ?
+                                                                        <div className="listing-av-container">
+                                                                            <div className="listing-av-checkbox-container-heading">{attribute.attributename}</div>
+                                                                            <div className="listing-av-checkbox-container">
+                                                                                {
+                                                                                    attribute.attributeValues.map((av, i) => {
+                                                                                        return <div key={i} className="listing-av-item white">
+                                                                                            <span>{av.value}</span>
+                                                                                            <input
+                                                                                                defaultChecked={av.selected}
+                                                                                                onChange={(e) => {
+                                                                                                    av.selected = e.target.checked;
+                                                                                                }}
+                                                                                                type="checkbox" name="check-box" />
+                                                                                        </div>
+                                                                                    })}
+                                                                            </div>
+                                                                            <span className="text-danger">{attribute.errorMessage}</span>
+                                                                        </div>
+                                                                        :
+                                                                        <div className="listing-checkbox-container white">
+                                                                            <span>{attribute.attributename}</span>
+                                                                            <input
+                                                                                defaultChecked={attribute.selected}
+                                                                                onChange={(e) => {
+                                                                                    attribute.selected = e.target.checked;
+                                                                                }}
+                                                                                type="checkbox" name="check-box" />
+                                                                            <span className="text-danger">{attribute.errorMessage}</span>
+                                                                        </div>
+                                                                }
+                                                            </div> :
+                                                            <div key={index} className="">
+                                                                <div className="listing-textbox-container white">
+                                                                    <span>{attribute.attributename}</span>
+                                                                    <input type="text"
+                                                                        defaultValue={attribute.textValue}
+                                                                        onChange={(e) => {
+                                                                            attribute.textValue = e.target.value;
+                                                                        }} />
+                                                                    <span className="text-danger">{attribute.errorMessage}</span>
+                                                                </div>
+                                                            </div>
+                                                    }
+                                                </div>
+                                            })
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                            {/*Summary*/}
+                            <div className="text-danger row">{editlistingerror}</div>
+                            <div className="col-md-6 listing-createdbutton-container">
+                                <button
+                                    onClick={async (e) => {
+                                        e.preventDefault();
+                                        try {
+                                            const newvm = await EditListing(editlisting);
+                                            seteditlisting(newvm);
+                                            if (newvm.isValid) {
+                                                seteditlistingid(-1);
+                                            }
+                                        } catch (errorresponse) {
+                                            errorresponse.json().then(error => {
+                                                seteditlistingerror(error);
+                                            })
+                                        }
+                                    }}
+                                    type="submit" className="btn-blue border_radius margin40">Save Changes</button>
+                                <button className="btn-blue border_radius margin40"
+                                    onClick={(e) => { seteditlistingid(-1) }}>Cancel</button>
+                            </div>
+                        </div>
+                }
             </>
         }
 

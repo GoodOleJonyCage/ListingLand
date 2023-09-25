@@ -269,6 +269,24 @@ export const GetListings = async () => {
     throw response;
 }
 
+export const EditListing = async (_vm) => {
+
+    let response = await fetch(`listing/editlisting`, {
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            //'Authorization': "Bearer " + getJwtToken()
+        },
+        method: 'POST',
+        body: JSON.stringify({ vm: _vm }),
+    });
+    if (response.ok) {
+        const data = await response.json();
+        return data;
+    }
+    throw response;
+}
+
 export const CreateListing = async (_vm) => {
 
     let response = await fetch(`listing/createlisting`, {

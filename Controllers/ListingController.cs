@@ -89,6 +89,9 @@ namespace ListingLand.Controllers
                 listing.Location.Country.Name = listingEntry.c.Name;
                 listing.Location.Region.Name = listingEntry.r.Name;
                 listing.Location.City.Name = listingEntry.ci.Name;
+                listing.Location.Country.ID = listingEntry.c.Id;
+                listing.Location.Region.ID = listingEntry.r.Id;
+                listing.Location.City.ID = listingEntry.ci.Id;
                 listing.Price = (listingEntry.l.Price ?? 0).ToString();
                 listing.Area = (listingEntry.l.Area ?? 0).ToString();
                 listing.Bedrooms = (listingEntry.l.Bedrooms ?? 0).ToString();
@@ -134,6 +137,9 @@ namespace ListingLand.Controllers
                 listing.Location.Country.Name = listingEntry.c.Name;
                 listing.Location.Region.Name = listingEntry.r.Name;
                 listing.Location.City.Name = listingEntry.ci.Name;
+                listing.Location.Country.ID = listingEntry.c.Id;
+                listing.Location.Region.ID = listingEntry.r.Id;
+                listing.Location.City.ID = listingEntry.ci.Id;
                 listing.Price = (listingEntry.l.Price ?? 0).ToString();
                 listing.Area = (listingEntry.l.Area ?? 0).ToString();
                 listing.Bedrooms = (listingEntry.l.Bedrooms ?? 0).ToString();
@@ -180,6 +186,9 @@ namespace ListingLand.Controllers
                 listing.Location.Country.Name = listingEntry.c.Name;
                 listing.Location.Region.Name = listingEntry.r.Name;
                 listing.Location.City.Name = listingEntry.ci.Name;
+                listing.Location.Country.ID = listingEntry.c.Id;
+                listing.Location.Region.ID = listingEntry.r.Id;
+                listing.Location.City.ID = listingEntry.ci.Id;
                 listing.Price = (listingEntry.l.Price ?? 0).ToString();
                 listing.Area = (listingEntry.l.Area ?? 0).ToString();
                 listing.Bedrooms = (listingEntry.l.Bedrooms ?? 0).ToString();
@@ -235,6 +244,9 @@ namespace ListingLand.Controllers
                 listing.Location.Country.Name = listingEntry.c.Name;
                 listing.Location.Region.Name = listingEntry.r.Name;
                 listing.Location.City.Name = listingEntry.ci.Name;
+                listing.Location.Country.ID = listingEntry.c.Id;
+                listing.Location.Region.ID = listingEntry.r.Id;
+                listing.Location.City.ID = listingEntry.ci.Id;
                 listing.Price = (listingEntry.l.Price??0).ToString();
                 listing.Area = (listingEntry.l.Area ?? 0).ToString();
                 listing.Bedrooms = (listingEntry.l.Bedrooms ?? 0).ToString();
@@ -273,16 +285,39 @@ namespace ListingLand.Controllers
             //if there are attribute values for that specefic attribute
             lst.ForEach(attribute =>
             {
-                attribute.AttributeValues = (from a in _db.AttributeValues
+                //get all attributes values 
+                attribute.AttributeValues =
+                _db.AttributeValues
+                .Where(a => a.AttributeId == attribute.AttributeID)
+                .Select(a => new ViewModels.AttributeValue()
+                {
+                    ID = a.Id,
+                    AttributeID = a.AttributeId ?? 0,
+                    Value = a.Value ?? string.Empty
+                })
+                .ToList();
+
+                //get attribute values selected
+                var lstAttributesSelected = (from a in _db.AttributeValues
                                              join la in _db.ListingAttributes on a.Id equals la.AttributeValueId
                                              where la.ListingId == listingId &&
                                                    a.AttributeId == attribute.AttributeID
                                              select new ViewModels.AttributeValue()
                                              {
+                                                 ID = a.Id,
                                                  AttributeID = a.AttributeId ?? 0,
                                                  Value = a.Value ?? string.Empty
 
                                              }).ToList();
+
+
+                //check attributes selected 
+                attribute.AttributeValues.ForEach(a =>
+                {
+                    var attrbselected = lstAttributesSelected.Where(asel => asel.ID == a.ID).SingleOrDefault();
+                    if (attrbselected != null)
+                        a.Selected = true;
+                });
             });
             listing.Features = lst;
             #endregion
@@ -315,16 +350,38 @@ namespace ListingLand.Controllers
             //if there are attribute values for that specefic attribute
             lst.ForEach(attribute =>
             {
-                attribute.AttributeValues = (from a in _db.AttributeValues
+                //get all attributes values 
+                attribute.AttributeValues =
+                _db.AttributeValues
+                .Where(a => a.AttributeId == attribute.AttributeID)
+                .Select(a => new ViewModels.AttributeValue()
+                {
+                    ID = a.Id,
+                    AttributeID = a.AttributeId ?? 0,
+                    Value = a.Value ?? string.Empty
+                })
+                .ToList();
+                
+                //get attribute values selected
+                var lstAttributesSelected = (from a in _db.AttributeValues
                                              join la in _db.ListingAttributes on a.Id equals la.AttributeValueId
                                              where la.ListingId == listingId &&
                                                    a.AttributeId == attribute.AttributeID
                                              select new ViewModels.AttributeValue()
                                              {
+                                                 ID = a.Id,
                                                  AttributeID = a.AttributeId ?? 0,
                                                  Value = a.Value ?? string.Empty
 
                                              }).ToList();
+
+                //check attributes selected 
+                attribute.AttributeValues.ForEach(a =>
+                {
+                    var attrbselected = lstAttributesSelected.Where(asel => asel.ID == a.ID).SingleOrDefault();
+                    if (attrbselected != null)
+                        a.Selected = true;
+                });
             });
             listing.QuickSummary = lst;
             #endregion
@@ -741,6 +798,242 @@ namespace ListingLand.Controllers
                         vm = InitializeListing();
                         vm.IsValid = true;
                         vm.ListingID = newlisting.Entity.Id;
+                    }
+                    else
+                    {
+                        vm.IsValid = false;
+                    }
+                }
+                catch (Exception exc)
+                {
+                    return BadRequest(exc.Message);
+                }
+            }
+            return Ok(vm);
+        }
+
+        [HttpPost]
+        [Route("editlisting")]
+        public IActionResult EditListing([FromBody] System.Text.Json.JsonElement param)
+        {
+            var vm = JsonConvert.DeserializeObject<ViewModels.Listing>(param.GetProperty("vm").ToString());
+            bool hasErrors = false;
+
+            if (vm is not null)
+            {
+                #region clear errors
+                vm.NameError = vm.FeatureError = vm.LocationError = string.Empty;
+                vm.PriceError = string.Empty;
+                vm.AreaError = string.Empty;
+                vm.BedroomsError = string.Empty;
+                vm.BathroomsError = string.Empty;
+                vm.OfficeRoomsError = string.Empty;
+                vm.GaragesError = string.Empty;
+                vm.BackyardError = string.Empty;
+                vm.FrontyardError = string.Empty;
+
+                vm?.QuickSummary.ForEach(a =>
+                {
+                    a.ErrorMessage = string.Empty;
+                });
+                vm?.Features.ForEach(a =>
+                {
+                    a.ErrorMessage = string.Empty;
+                });
+                vm?.Description.ForEach(d =>
+                {
+                    d.ErrorMessage = string.Empty;
+                });
+
+                #endregion
+
+                #region validation
+                if (string.IsNullOrEmpty(vm?.Name))
+                {
+                    hasErrors = true;
+                    vm.NameError = "Name Required";
+                }
+
+                if (vm.Location.Country.ID == 0 ||
+                    vm.Location.Region.ID == 0 ||
+                    vm.Location.City.ID == 0
+                    )
+                {
+                    hasErrors = true;
+                    vm.LocationError = "Location Required";
+                }
+                int result = 0;
+                if (string.IsNullOrEmpty(vm.Price) || !Int32.TryParse(vm.Price, out result))
+                {
+                    hasErrors = true;
+                    vm.PriceError = "Value required for Price";
+                }
+                if (string.IsNullOrEmpty(vm.Area) || !Int32.TryParse(vm.Area, out result))
+                {
+                    hasErrors = true;
+                    vm.AreaError = "Value required for Area";
+                }
+                if (string.IsNullOrEmpty(vm.Bedrooms) || !Int32.TryParse(vm.Bedrooms, out result))
+                {
+                    hasErrors = true;
+                    vm.BedroomsError = "Value required for Bedrooms";
+                }
+                if (string.IsNullOrEmpty(vm.Bathrooms) || !Int32.TryParse(vm.Bathrooms, out result))
+                {
+                    hasErrors = true;
+                    vm.BathroomsError = "Value required for Bathrooms";
+                }
+                if (string.IsNullOrEmpty(vm.OfficeRooms) || !Int32.TryParse(vm.OfficeRooms, out result))
+                {
+                    hasErrors = true;
+                    vm.OfficeRoomsError = "Value required for OfficeRooms";
+                }
+                if (string.IsNullOrEmpty(vm.Garages) || !Int32.TryParse(vm.Garages, out result))
+                {
+                    hasErrors = true;
+                    vm.GaragesError = "Value required for Garages";
+                }
+
+                vm?.QuickSummary.ForEach(a =>
+                {
+                    if (a.TypeID == (int)ViewModels.AttributeType.OpenText &&
+                        string.IsNullOrEmpty(a.TextValue))
+                    {
+                        hasErrors = true;
+                        a.ErrorMessage = $"Value required for {a.Attributename}";
+                    }
+
+                    if (a.TypeID == (int)ViewModels.AttributeType.CheckBox)
+                    {
+                        if (a.AttributeValues.Count > 0)
+                        {
+                            if (a.AttributeValues.All(at => at.Selected is false))
+                            {
+                                hasErrors = true;
+                                a.ErrorMessage = $"Value required for {a.Attributename}";
+                            }
+                        }
+                        else
+                        {
+                            if (a.Selected is false)
+                            {
+                                hasErrors = true;
+                                a.ErrorMessage = $"Value required for {a.Attributename}";
+                            }
+                        }
+                    }
+
+                });
+
+                if (vm.Features.All(f => f.Selected is false))
+                {
+                    hasErrors = true;
+                    vm.FeatureError = "Value required for Features";
+                }
+
+                vm?.Description.ForEach(d =>
+                {
+                    if (d.TypeID == (int)ViewModels.AttributeType.OpenText &&
+                        string.IsNullOrEmpty(d.TextValue))
+                    {
+                        hasErrors = true;
+                        d.ErrorMessage = $"Value required for {d.Attributename}";
+                    }
+                });
+
+                #endregion 
+
+                try
+                {
+                    if (!hasErrors)
+                    {
+                        #region save edited listing
+
+                        var listingtoEdit = _db.Listings.Where(l => l.Id == vm.ListingID).SingleOrDefault();
+                        listingtoEdit.Name = vm?.Name;
+                        listingtoEdit.CountryId = vm?.Location.Country.ID;
+                        listingtoEdit.RegionId = vm?.Location.Region.ID;
+                        listingtoEdit.CityId = vm?.Location.City.ID;
+                        listingtoEdit.Price = Int32.Parse(vm?.Price);
+                        listingtoEdit.Area = Int32.Parse(vm?.Area);
+                        listingtoEdit.Bedrooms = Int32.Parse(vm?.Bedrooms);
+                        listingtoEdit.Bathrooms = Int32.Parse(vm?.Bathrooms);
+                        listingtoEdit.OfficeRooms = Int32.Parse(vm?.OfficeRooms);
+                        listingtoEdit.Garages = Int32.Parse(vm?.Garages);
+                        listingtoEdit.Backyard = vm?.Backyard;
+                        listingtoEdit.Frontyard = vm?.Frontyard;
+
+                        _db.SaveChanges();
+                        #endregion
+
+                        #region save listing attributes
+                        List<ListingAttribute> lstAttrbites = new List<ListingAttribute>();
+
+                        #region Quick Summary
+
+                        vm?.QuickSummary.ForEach(a =>
+                        {
+                            if (a.TypeID == (int)ViewModels.AttributeType.OpenText)
+                            {
+                                lstAttrbites.Add(new ListingAttribute()
+                                {
+                                    ListingId = vm.ListingID,
+                                    AttributeId = a.AttributeID,
+                                    ValueText = a.TextValue
+                                });
+                            }
+
+                            if (a.TypeID == (int)ViewModels.AttributeType.CheckBox)
+                            {
+                                if (a.AttributeValues.Count > 0)
+                                {
+                                    a.AttributeValues.Where(at => at.Selected is true).ToList()
+                                    .ForEach(at =>
+                                    {
+                                        lstAttrbites.Add(new ListingAttribute()
+                                        {
+                                            ListingId = vm.ListingID,
+                                            AttributeId = at.AttributeID,
+                                            AttributeValueId = at.ID
+                                        });
+                                    });
+                                }
+                            }
+                        });
+                        #endregion
+
+                        #region Features
+                        vm?.Features.Where(f => f.Selected is true).ToList()
+                        .ForEach(at =>
+                        {
+                            lstAttrbites.Add(new ListingAttribute()
+                            {
+                                ListingId = vm.ListingID,
+                                AttributeId = at.AttributeID,
+                            });
+                        });
+                        #endregion
+
+                        #region Descriptions
+                        vm?.Description.ForEach(at =>
+                        {
+                            lstAttrbites.Add(new ListingAttribute()
+                            {
+                                ListingId = vm.ListingID,
+                                AttributeId = at.AttributeID,
+                                ValueText = at.TextValue
+                            });
+                        });
+                        #endregion
+                        
+                        _db.ListingAttributes.RemoveRange(_db.ListingAttributes.Where(l => l.ListingId == vm.ListingID).ToList());
+                        _db.ListingAttributes.AddRange(lstAttrbites);
+                        _db.SaveChanges();
+
+                        #endregion
+
+                        //reinitialize after db save 
+                        vm.IsValid = true;
                     }
                     else
                     {
