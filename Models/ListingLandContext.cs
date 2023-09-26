@@ -17,6 +17,8 @@ public partial class ListingLandContext : DbContext
 
     public virtual DbSet<Agent> Agents { get; set; }
 
+    public virtual DbSet<AgentTestimonial> AgentTestimonials { get; set; }
+
     public virtual DbSet<Attribute> Attributes { get; set; }
 
     public virtual DbSet<AttributeSection> AttributeSections { get; set; }
@@ -65,6 +67,27 @@ public partial class ListingLandContext : DbContext
             entity.Property(e => e.Telephone)
                 .HasMaxLength(500)
                 .IsUnicode(false);
+        });
+
+        modelBuilder.Entity<AgentTestimonial>(entity =>
+        {
+            entity.ToTable("AgentTestimonial");
+
+            entity.Property(e => e.Id).HasColumnName("ID");
+            entity.Property(e => e.AgentId).HasColumnName("AgentID");
+            entity.Property(e => e.By)
+                .HasMaxLength(300)
+                .IsUnicode(false);
+            entity.Property(e => e.Date)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
+            entity.Property(e => e.Testimonial)
+                .HasMaxLength(3000)
+                .IsUnicode(false);
+
+            entity.HasOne(d => d.Agent).WithMany(p => p.AgentTestimonials)
+                .HasForeignKey(d => d.AgentId)
+                .HasConstraintName("FK_AgentTestimonial_Agent");
         });
 
         modelBuilder.Entity<Attribute>(entity =>

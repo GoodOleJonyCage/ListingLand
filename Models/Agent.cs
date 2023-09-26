@@ -19,5 +19,7 @@ public partial class Agent
 
     public string? About { get; set; }
 
+    public virtual ICollection<AgentTestimonial> AgentTestimonials { get; set; } = new List<AgentTestimonial>();
+
     public virtual ICollection<Listing> Listings { get; set; } = new List<Listing>();
 }
