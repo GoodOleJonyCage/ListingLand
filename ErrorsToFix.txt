@@ -1,1 +1,1 @@
-﻿
+﻿Why doesnt HeaderListings show up in NewListings page and login page 

@@ -1,19 +1,23 @@
-﻿import { useEffect } from 'react'
+﻿import { useEffect, useState } from 'react'
 //import { useNavigate } from 'react-router-dom';
 import { UserStore } from '../Store/UserStore'
+import { HeaderListings } from '../components/HeaderListings'
 
 export const Header = () => {
 
-    //const navigate = useNavigate();
+
     const { getUsername, clearToken } = UserStore();
 
-    useEffect(() => {
-         
+    const loadScript = async () => {
         const script = document.createElement("script");
         script.src = "js/bootsnav.js";
         script.async = true;
         document.body.appendChild(script);
 
+    }
+
+    useEffect(() => {
+        loadScript();
     }, []);
 
     return <>
@@ -47,11 +51,11 @@ export const Header = () => {
                     <div className="row">
                         <div className="col-md-3 col-sm-12">
                             <div className="logo">
-                                <a href="index4.html"><img alt="" src="images/logo-white.png"/></a>
+                                <a href="index4.html"><img alt="" src="images/logo-white.png" /></a>
                             </div>
                         </div>
-                        {/* Info Box*/ }
-                       
+                        {/* Info Box*/}
+
                         <div className="col-md-9 col-sm-12 right">
                             <div className="info-box first">
                                 <div className="icons"><i className="icon-telephone114"></i></div>
@@ -88,30 +92,31 @@ export const Header = () => {
                         </ul>
                     </div>
                     {/* Start Header Navigation*/}
-                    
+
                     <div className="navbar-header">
                         <button type="button" className="navbar-toggle" data-toggle="collapse" data-target="#navbar-menu">
                             <i className="fa fa-bars"></i>
                         </button>
-                        <a className="navbar-brand sticky_logo" href="index4.html"><img src="images/logo-white.png" className="logo" alt=""/></a>
-                    </div> 
+                        <a className="navbar-brand sticky_logo" href="index4.html"><img src="images/logo-white.png" className="logo" alt="" /></a>
+                    </div>
                     {/* Start Header Navigation*/}
                     <div className="collapse navbar-collapse" id="navbar-menu">
                         <ul className="nav navbar-nav" data-in="fadeIn" data-out="fadeOut">
                             <li className="dropdown active">
-                                <a href="#." className="dropdown-toggle" data-toggle="dropdown">Home </a>
-                                <ul className="dropdown-menu">
-                                    <li><a href="index.html">Home Style 1</a></li>
-                                    <li><a href="index2.html">Home Style 2</a></li>
-                                    <li><a href="index3.html">Home Style 3</a></li>
-                                    <li><a href="index4.html">Home Style 4</a></li>
-                                    <li> <a href="index5.html">Home Style 5</a></li>
-                                    <li> <a href="index6.html">Home Style 6</a></li>
-                                    <li> <a href="index7.html">Home Style 7</a></li>
-                                    <li> <a href="index8.html">Home Style 8</a></li>
-                                    <li> <a href="index9.html">Home Style 9</a></li>
-                                    <li> <a href="fullscreen.html">Home Fullscreen<span>new</span></a></li>
-                                </ul>
+                                {/*       <a href="/home" className="dropdown-toggle" data-toggle="dropdown">Home </a>*/}
+                                <a href="/home" >Home </a>
+                                {/*<ul className="dropdown-menu">*/}
+                                {/*    <li><a href="index.html">Home Style 1</a></li>*/}
+                                {/*    <li><a href="index2.html">Home Style 2</a></li>*/}
+                                {/*    <li><a href="index3.html">Home Style 3</a></li>*/}
+                                {/*    <li><a href="index4.html">Home Style 4</a></li>*/}
+                                {/*    <li> <a href="index5.html">Home Style 5</a></li>*/}
+                                {/*    <li> <a href="index6.html">Home Style 6</a></li>*/}
+                                {/*    <li> <a href="index7.html">Home Style 7</a></li>*/}
+                                {/*    <li> <a href="index8.html">Home Style 8</a></li>*/}
+                                {/*    <li> <a href="index9.html">Home Style 9</a></li>*/}
+                                {/*    <li> <a href="fullscreen.html">Home Fullscreen<span>new</span></a></li>*/}
+                                {/*</ul>*/}
                             </li>
                             <li className="dropdown megamenu-fw">
                                 <a href="/#" className="dropdown-toggle" data-toggle="dropdown">Listing</a>
@@ -124,65 +129,14 @@ export const Header = () => {
                                                     <ul className="menu-col">
                                                         <li><a href="/newlisting">New Listing</a></li>
                                                         <li><a href="/viewlistings">View Listings</a></li>
-                                                        <li><a href="listing2.html">Search by City</a></li>
-                                                        <li><a href="listing5.html">Search by Category</a></li>
-                                                        <li><a href="listing3.html">Search by Type</a></li>
+
                                                     </ul>
                                                 </div>
                                             </div>
                                             <div className="col-menu col-md-9">
                                                 <h5 className="title bottom20">PROPERTIES LIST</h5>
                                                 <div className="row">
-                                                    <div id="nav_slider" className="owl-carousel">
-                                                        <div className="item">
-                                                            <div className="image bottom15">
-                                                                <img src="images/nav-slider1.jpg" alt="Featured Property"/>
-                                                                    <span className="nav_tag yellow text-uppercase">for rent</span>
-                                                            </div>
-                                                            <h4><a href="property_detail1.html">Park Avenue Apartment</a></h4>
-                                                            <p>Towson London, MR 21501</p>
-                                                        </div>
-                                                        <div className="item">
-                                                            <div className="image bottom15">
-                                                                <img src="images/nav-slider2.jpg" alt="Featured Property"/>
-                                                                    <span className="nav_tag yellow text-uppercase">for rent</span>
-                                                            </div>
-                                                            <h4><a href="property_detail2.html">Park Avenue Apartment</a></h4>
-                                                            <p>Towson London, MR 21501</p>
-                                                        </div>
-                                                        <div className="item">
-                                                            <div className="image bottom15">
-                                                                <img src="images/nav-slider3.jpg" alt="Featured Property"/>
-                                                                    <span className="nav_tag yellow text-uppercase">for rent</span>
-                                                            </div>
-                                                            <h4><a href="property_detail3.html">Park Avenue Apartment</a></h4>
-                                                            <p>Towson London, MR 21501</p>
-                                                        </div>
-                                                        <div className="item">
-                                                            <div className="image bottom15">
-                                                                <img src="images/nav-slider1.jpg" alt="Featured Property"/>
-                                                                    <span className="nav_tag yellow text-uppercase">for rent</span>
-                                                            </div>
-                                                            <h4><a href="property_detail1.html">Park Avenue Apartment</a></h4>
-                                                            <p>Towson London, MR 21501</p>
-                                                        </div>
-                                                        <div className="item">
-                                                            <div className="image bottom15">
-                                                                <img src="images/nav-slider2.jpg" alt="Featured Property"/>
-                                                                    <span className="nav_tag yellow text-uppercase">for rent</span>
-                                                            </div>
-                                                            <h4><a href="property_detail2.html">Park Avenue Apartment</a></h4>
-                                                            <p>Towson London, MR 21501</p>
-                                                        </div>
-                                                        <div className="item">
-                                                            <div className="image bottom15">
-                                                                <img src="images/nav-slider3.jpg" alt="Featured Property"/>
-                                                                    <span className="nav_tag yellow text-uppercase">for rent</span>
-                                                            </div>
-                                                            <h4><a href="property_detail3.html">Park Avenue Apartment</a></h4>
-                                                            <p>Towson London, MR 21501</p>
-                                                        </div>
-                                                    </div>
+                                                    <HeaderListings></HeaderListings>
                                                 </div>
                                             </div>
                                         </div>
@@ -308,4 +262,3 @@ export const Header = () => {
     </>
 }
 
-               

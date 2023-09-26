@@ -245,3 +245,12 @@ MuiOutlinedInput-input
 .register-textarea textarea {
     width: 100%;
 }
+
+.menu-properties a{
+    color:black;
+    font-size:small;
+}
+.menu-properties p {
+    font-style:oblique;
+    font-size: small;
+}

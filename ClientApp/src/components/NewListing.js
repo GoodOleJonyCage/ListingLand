@@ -19,7 +19,7 @@ export const NewListing = () => {
         const newvm = await GetNewListing();
         setvm(newvm);
         //console.log(newvm);
-       
+
     }
 
     useEffect(() => {
