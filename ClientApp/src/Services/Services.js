@@ -214,6 +214,23 @@ export const GetNewListing = async () => {
     throw response;
 }
 
+export const DeleteListing = async (_listingid) => {
+
+    let response = await fetch(`listing/deletelisting`, {
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            //'Authorization': "Bearer " + getJwtToken()
+        },
+        method: 'POST',
+        body: JSON.stringify({ listingid: _listingid }),
+    });
+    if (response.ok) {
+        const data = await response.json();
+        return data;
+    }
+    throw response;
+}
 
 export const GetListing = async (_listingid) => {
 

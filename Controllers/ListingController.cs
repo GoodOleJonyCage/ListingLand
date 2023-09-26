@@ -1217,5 +1217,25 @@ namespace ListingLand.Controllers
 
             return Ok(listings);
         }
+
+        [HttpPost]
+        [Route("deletelisting")]
+        public IActionResult DeleteListing([FromBody] System.Text.Json.JsonElement param)
+        {
+            var listingid = Int32.Parse(param.GetProperty("listingid").ToString());
+            try
+            {
+                _db.ListingPics.RemoveRange(_db.ListingPics.Where(l => l.ListingId == listingid).ToList());
+                _db.ListingAttributes.RemoveRange(_db.ListingAttributes.Where(l => l.ListingId == listingid).ToList());
+                _db.Listings.RemoveRange(_db.Listings.Where(l => l.Id == listingid).ToList());
+                _db.SaveChanges();
+            }
+            catch (Exception exc)
+            {
+
+                return BadRequest(exc.Message);
+            }
+            return Ok(true);
+        }
     }
 }

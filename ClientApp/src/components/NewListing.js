@@ -1,5 +1,5 @@
 ﻿import { useState, useEffect } from 'react'
-import { GetNewListing, CreateListing, UploadFiles, GetUserInfo, GetListingsByUserID, GetListing, EditListing } from '../Services/Services'
+import { GetNewListing, CreateListing, UploadFiles, GetUserInfo, GetListingsByUserID, GetListing, EditListing, DeleteListing } from '../Services/Services'
 import { Loading } from './Loading'
 import { LocationLocator } from './LocationLocator'
 import { UserStore } from '../Store/UserStore'
@@ -632,7 +632,16 @@ export const NewListing = () => {
                                                         seteditlistingid(listing.listingID);
                                                     }}
                                                     href="#"><i className="icon-pen2"></i></a>
-                                                <a href="#"><i className="icon-cross"></i></a>
+                                                <a
+                                                    onClick={async  (e) => {
+                                                        e.preventDefault();
+                                                        if (window.confirm("Delete this listing?")) {
+                                                            //delete this entry
+                                                            await DeleteListing(listing.listingID);
+                                                            loadData();
+                                                        }
+                                                    }}
+                                                    href="#"><i className="icon-cross"></i></a>
                                             </div>
                                         </div>
                                     </div>
@@ -676,8 +685,19 @@ export const NewListing = () => {
 
             return <>
                 {
-                    editlisting === null    ? <></> :
+                    editlisting === null ? <></> :
                         <div className="row">
+                            <div className="col-sm-12">
+                                {
+                                    editlisting.images.map((image, i) => {
+                                        return <div className="item main-image-container" key={i}>
+                                            <a data-fancybox="images" data-type="image" data-src="#">
+                                                <img src={image.imageSrc} alt="image"></img>
+                                            </a>
+                                        </div>
+                                    })
+                                }
+                            </div>
                             <div className="col-sm-12">
                                 <div className="search-propertie-filters">
                                     <div className="container-2">
