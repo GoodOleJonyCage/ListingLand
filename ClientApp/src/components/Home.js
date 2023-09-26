@@ -1,26 +1,59 @@
-import React, { Component } from 'react';
+import { useState, useEffect } from 'react'
+import { GetListings } from '../Services/Services'
+import { Loading } from './Loading'
+import { PagedHomeListings } from './PagedHomeListings'
+import { Search } from './Search'
 
-export class Home extends Component {
-  static displayName = Home.name;
+export const Home = () => {
 
-  render() {
-    return (
-      <div>
-        <h1>Hello, world!</h1>
-        <p>Welcome to your new single-page application, built with:</p>
-        <ul>
-          <li><a href='https://get.asp.net/'>ASP.NET Core</a> and <a href='https://msdn.microsoft.com/en-us/library/67ef8sbd.aspx'>C#</a> for cross-platform server-side code</li>
-          <li><a href='https://facebook.github.io/react/'>React</a> for client-side code</li>
-          <li><a href='http://getbootstrap.com/'>Bootstrap</a> for layout and styling</li>
-        </ul>
-        <p>To help you get started, we have also set up:</p>
-        <ul>
-          <li><strong>Client-side navigation</strong>. For example, click <em>Counter</em> then <em>Back</em> to return here.</li>
-          <li><strong>Development server integration</strong>. In development mode, the development server from <code>create-react-app</code> runs in the background automatically, so your client-side resources are dynamically built on demand and the page refreshes when you modify any file.</li>
-          <li><strong>Efficient production builds</strong>. In production mode, development-time features are disabled, and your <code>dotnet publish</code> configuration produces minified, efficiently bundled JavaScript files.</li>
-        </ul>
-        <p>The <code>ClientApp</code> subdirectory is a standard React application based on the <code>create-react-app</code> template. If you open a command prompt in that directory, you can run <code>npm</code> commands such as <code>npm test</code> or <code>npm install</code>.</p>
-      </div>
-    );
-  }
+    const [listings, setlistings] = useState([]);
+    const [loaded, setloaded] = useState(false);
+
+    const loadData = async () => {
+
+        setloaded(false);
+
+        const listings = await GetListings();
+        setlistings(listings);
+        //console.log(listings);
+
+        setloaded(true);
+
+        let script = document.createElement("script");
+        script.src = "js/functions.js";
+        script.async = true;
+        document.body.appendChild(script);
+    }
+
+    useEffect(() => {
+        loadData();
+    }, []);
+
+    return <>
+        <section id="listing1" className="listing1 padding_top">
+            <div className="container">
+                <div className="row">
+                    <div className="col-md-8 col-sm-12 col-xs-12">
+                        <div className="row">
+                            <div className="col-md-9">
+                                <h2 className="uppercase">PROPERTY LISTINGS</h2>
+                                <p className="heading_space">We have Properties in these Areas View a list of Featured Properties.</p>
+                            </div>
+                            
+                        </div>
+                        <div className="row">
+                            {
+                                !loaded && listings.length === 0 ? <Loading></Loading> :
+                                    listings.length === 0 ? <div className="highlight-error">No Records found</div> :
+                                        <PagedHomeListings listings={listings}></PagedHomeListings>
+                            }
+                        </div>
+                    </div>
+                    <Search setloaded={setloaded} setlistings={setlistings}></Search>
+                </div>
+            </div>
+        </section>
+        </>
 }
+
+ 
