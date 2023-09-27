@@ -33,6 +33,7 @@ export const PagedHomeListings = (props) => {
 
     return <>
         {
+            
             currentTodos.map((listing, index) => {
                 return <ListingHomeItem listing={listing} key={index} index={index}></ListingHomeItem>
             })

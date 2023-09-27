@@ -1,4 +1,43 @@
 ﻿
+export const GetTestimonials = async (_userid) => {
+
+    let response = await fetch(`user/gettestimonials`, {
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            //'Authorization': "Bearer " + getJwtToken()
+        },
+        method: 'POST',
+        body: JSON.stringify({
+            userid: _userid
+        })
+    });
+
+    if (response.ok) {
+        const data = await response.json();
+        return data;
+    }
+
+    throw response;
+}
+export const GetUsers = async () => {
+
+    let response = await fetch(`user/getusers`, {
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            //'Authorization': "Bearer " + getJwtToken()
+        },
+    });
+
+    if (response.ok) {
+        const data = await response.json();
+        return data;
+    }
+
+    throw response;
+}
+
 export const GetUserInfo = async (_username) => {
 
     let response = await fetch(`user/getuser`, {

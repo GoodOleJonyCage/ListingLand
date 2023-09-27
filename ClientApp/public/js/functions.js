@@ -129,13 +129,13 @@ jQuery(function($) {
    
    
    /*Accordions*/
-  var $active = $('#accordion .panel-collapse.in').prev().addClass('active');
-  $active.find('a').append('<i class="fa fa-minus-circle"></i>');
-  $('#accordion .panel-heading').not($active).find('a').append('<i class="fa fa-plus-circle"></i>');
-  $('#accordion').on('show.bs.collapse', function (e) {
-    $('#accordion .panel-heading.active').removeClass('active').find('.fa').toggleClass('fa-plus-circle fa-minus-circle');
-    $(e.target).prev().addClass('active').find('.fa').toggleClass('fa-plus-circle fa-minus-circle');
-  })
+  //var $active = $('#accordion .panel-collapse.in').prev().addClass('active');
+  //$active.find('a').append('<i class="fa fa-minus-circle"></i>');
+  //$('#accordion .panel-heading').not($active).find('a').append('<i class="fa fa-plus-circle"></i>');
+  //$('#accordion').on('show.bs.collapse', function (e) {
+  //  $('#accordion .panel-heading.active').removeClass('active').find('.fa').toggleClass('fa-plus-circle fa-minus-circle');
+  //  $(e.target).prev().addClass('active').find('.fa').toggleClass('fa-plus-circle fa-minus-circle');
+  //})
      
 
   
@@ -615,28 +615,28 @@ jQuery(function($) {
   });
   
   //Testinomial Page
-  $('#testinomial-masonry').cubeportfolio({
-    layoutMode: 'grid',
-    gapHorizontal: 50,
-    gapVertical: 20,
-    gridAdjustment: 'responsive',
-    mediaQueries: [{
-      width: 1500,
-      cols: 3
-    }, {
-      width: 1100,
-      cols: 3
-    }, {
-      width: 800,
-      cols: 3
-    }, {
-      width: 480,
-      cols: 2
-    }, {
-      width: 320,
-      cols: 1
-    }],
-  });
+  //$('#testinomial-masonry').cubeportfolio({
+  //  layoutMode: 'grid',
+  //  gapHorizontal: 50,
+  //  gapVertical: 20,
+  //  gridAdjustment: 'responsive',
+  //  mediaQueries: [{
+  //    width: 1500,
+  //    cols: 3
+  //  }, {
+  //    width: 1100,
+  //    cols: 3
+  //  }, {
+  //    width: 800,
+  //    cols: 3
+  //  }, {
+  //    width: 480,
+  //    cols: 2
+  //  }, {
+  //    width: 320,
+  //    cols: 1
+  //  }],
+  //});
   
   
  

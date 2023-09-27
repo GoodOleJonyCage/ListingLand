@@ -10,6 +10,7 @@ export const ViewListing = (props) => {
     const [vm, setvm] = useState(null);
     const [searchParams, setSearchParams] = useSearchParams();
     const [similarlistings, setsimilarlistings] = useState([]);
+    const [loaded, setloaded] = useState(false);
     //const navigate = useNavigate();
 
     const loadData = async () => {
@@ -21,6 +22,8 @@ export const ViewListing = (props) => {
         const listings = await GetListings();
         setsimilarlistings(listings);
         //console.log(listings);
+
+        setloaded(true);
 
         let script = document.createElement("script");
         script.src = "js/range-Slider.min.js";
@@ -57,7 +60,7 @@ export const ViewListing = (props) => {
 
     useEffect(() => {
         loadData();
-    }, []);
+    }, [loaded]);
 
 
     return <>

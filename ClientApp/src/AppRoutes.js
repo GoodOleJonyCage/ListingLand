@@ -6,7 +6,7 @@ import { ViewListingPage } from "./Pages/ViewListingPage";
 import { ViewListingsPage } from "./Pages/ViewListingsPage";
 import { LoginPage } from "./Pages/LoginPage";
 import { LogoutPage } from "./Pages/LogoutPage";
-
+import { AgentsPage } from "./Pages/AgentsPage"
 
 const AppRoutes = [
     {
@@ -44,6 +44,10 @@ const AppRoutes = [
     {
         path: '/logout',
         element: <LogoutPage />
+    },
+    {
+        path: '/agents',
+        element: <AgentsPage />
     },
 
 ];

@@ -41,7 +41,7 @@ export const HeaderListings = () => {
     return <>
         {
             !loaded  ? <Loading></Loading> :
-                <div id="nav_slider" className="owl-carousel">
+                <div id="nav_slider" className="owl-carousel header-carousel">
                     {
                         listings.map((listing, index) => {
                             return <div className="item menu-properties" key={index}>

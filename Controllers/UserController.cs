@@ -167,6 +167,7 @@ namespace ListingLand.Controllers
             var userDB = _db.Agents.Where(u => u.Email == username ).SingleOrDefault();
             if (userDB != null)
             {
+                user.ID = userDB.Id;
                 user.EmailAddress = userDB.Email;
                 user.Telephone = userDB.Telephone;
                 user.Name = userDB.Name;
@@ -178,6 +179,42 @@ namespace ListingLand.Controllers
             {
                 return BadRequest("User Not Found");
             }
+        }
+
+        [HttpGet]
+        [Route("getusers")]
+        public ActionResult GetUsers()
+        {
+            var users = _db.Agents
+                        .Select(u => new ViewModels.User()
+                        {
+                            ID = u.Id,
+                            EmailAddress = u.Email,
+                            Name = u.Name,
+                            Telephone = u.Telephone,
+                            Image = Helpers.Db_Image_Helper.Get_Db_Image(u.Pic),
+                            About = u.About,
+                        }).ToList();
+
+            return Ok(users);
+        }
+
+        [HttpPost]
+        [Route("gettestimonials")]
+        public ActionResult GetTestimonials([FromBody] System.Text.Json.JsonElement param)
+        {
+            var userid = Int32.Parse(param.GetProperty("userid").ToString());
+            var lst = _db.AgentTestimonials
+                        .Where(t => t.AgentId == userid)
+                        .Select(t => new ViewModels.AgentTestimonial
+                        {
+                            Testimonial = t.Testimonial,
+                            By = t.By,
+                            DateStr = t.Date.Value.ToString("dd MMM yyyy hh:mm:ss:tt"),
+                        }).ToList();
+
+            return Ok(lst);
+            
         }
 
         private string GenerateToken(ViewModels.User user)

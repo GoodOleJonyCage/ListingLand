@@ -254,3 +254,40 @@ MuiOutlinedInput-input
     font-style:oblique;
     font-size: small;
 }
+
+.listing_full_bg{
+    margin:0px;
+}
+
+.accordian-panel-container{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+.accordian-panel-container img{
+    height:80px;
+    width:80px;
+}
+
+.agent-container div{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:3px;
+    margin-top:3px;
+}
+
+.agent-container .image-container {
+    justify-content: center;
+    margin-bottom: 3px;
+    margin-top: 3px;
+}
+
+.agent-container .image-container img{
+    height:300px;
+    width:300px;
+}
+
+.header-carousel {
+    max-height: 250px;
+}
