@@ -151,28 +151,18 @@ jQuery(function($) {
     singleItem: true
   });
   
-  //For Three Slide
-  $(".three-item, #nav_slider").owlCarousel({
-    autoPlay: true,
-    navigationText: ["<i class='fa fa-angle-left'></i>", "<i class='fa fa-angle-right'></i>"],
-    stopOnHover: true,
-    pagination: false,
-    navigation: true,
-    items: 3,
-    itemsDesktop: [1199, 3],
-    itemsDesktopSmall: [979, 2]
-  });
+
   
   // Partners(logos)
-  $("#partner-slider").owlCarousel({
-    autoPlay: true,
-    stopOnHover: true,
-    navigation: true,
-    navigationText: ["<i class='fa fa-angle-left'></i>", "<i class='fa fa-angle-right'></i>"],
-    items: 5,
-    itemsDesktop: [1199, 3],
-    itemsDesktopSmall: [979, 3]
-  });
+  //$("#partner-slider").owlCarousel({
+  //  autoPlay: true,
+  //  stopOnHover: true,
+  //  navigation: true,
+  //  navigationText: ["<i class='fa fa-angle-left'></i>", "<i class='fa fa-angle-right'></i>"],
+  //  items: 5,
+  //  itemsDesktop: [1199, 3],
+  //  itemsDesktopSmall: [979, 3]
+  //});
   
   // Partners(logos)
   $("#partners").owlCarousel({
@@ -224,7 +214,7 @@ jQuery(function($) {
   //Property Details
   var sync1 = $("#property-d-1");
   var sync2 = $("#property-d-1-2");
-  var sync3 = $("#div-similar-properties");
+ 
  
   sync1.owlCarousel({
     autoPlay: 3000,
@@ -250,19 +240,7 @@ jQuery(function($) {
       el.find(".owl-item").eq(0).addClass("synced");
     }
   });
-    sync3.owlCarousel({
-        autoPlay: true,
-        items: 3,
-        itemsDesktop: [1199, 10],
-        itemsDesktopSmall: [979, 10],
-        itemsTablet: [768, 8],
-        itemsMobile: [479, 4],
-        pagination: true,
-        responsiveRefreshRate: 100,
-        afterInit: function (el) {
-            el.find(".owl-item").eq(0).addClass("synced");
-        }
-    });
+    
 
   function syncPosition(el) {
     var current = this.currentItem;

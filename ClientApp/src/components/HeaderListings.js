@@ -10,33 +10,41 @@ export const HeaderListings = () => {
 
     const loadData = async () => {
 
-        setloaded(false);
-
         const vm = await GetListings();
         setlistings(vm);
         //console.log(vm);
 
         setloaded(true);
 
-        loadScript();
     }
 
     const loadScript = async () => {
 
         let script = document.createElement("script");
-        script.src = "js/owl.carousel.min.js";
+        script.text = `  
+                      $("#nav_slider").owlCarousel({
+                        autoPlay: true,
+                        navigationText: ["<i class='fa fa-angle-left'></i>", "<i class='fa fa-angle-right'></i>"],
+                        stopOnHover: true,
+                        pagination: false,
+                        navigation: true,
+                        items: 3,
+                        itemsDesktop: [1199, 3],
+                        itemsDesktopSmall: [979, 2]
+                      });`;
         script.async = true;
         document.body.appendChild(script);
-
-        script = document.createElement("script");
-        script.src = "js/functions.js";
-        script.async = true;
-        document.body.appendChild(script);
+      
     }
 
     useEffect(() => {
-        loadData();  
-    }, []);
+
+        if (!loaded)
+            loadData();  
+
+        loadScript();
+
+    }, [loaded]);
 
     return <>
         {

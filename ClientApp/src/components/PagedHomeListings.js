@@ -8,7 +8,7 @@ export const PagedHomeListings = (props) => {
     //https://stackoverflow.com/questions/40232847/how-to-implement-pagination-in-react
     //console.log(props);
     const [currentPage, setcurrentPage] = useState(1);
-    const [itemsPerPage, settodosPerPage] = useState(10);
+    const [itemsPerPage, settodosPerPage] = useState(5);
 
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;

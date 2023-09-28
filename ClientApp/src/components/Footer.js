@@ -3,38 +3,18 @@
 export const Footer = () => {
 
     useEffect(() => {
- 
-
         let script = document.createElement("script");
-        script.src = "js/range-Slider.min.js";
+        script.text = `   $("#partner-slider").owlCarousel({
+                            autoPlay: true,
+                            stopOnHover: true,
+                            navigation: true,
+                            navigationText: ["<i class='fa fa-angle-left'></i>", "<i class='fa fa-angle-right'></i>"],
+                            items: 5,
+                            itemsDesktop: [1199, 3],
+                            itemsDesktopSmall: [979, 3]
+                          });`;
         script.async = true;
         document.body.appendChild(script);
-
-        script = document.createElement("script");
-        script.src = "js/owl.carousel.min.js";
-        script.async = true;
-        document.body.appendChild(script);
-
-        script = document.createElement("script");
-        script.src = "js/functions.js";
-        script.async = true;
-        document.body.appendChild(script);
-
-        script = document.createElement("script");
-        script.src = "js/jquery.cubeportfolio.min.js";
-        script.async = true;
-        document.body.appendChild(script);
-
-        script = document.createElement("script");
-        script.src = "js/selectbox-0.2.min.js";
-        script.async = true;
-        document.body.appendChild(script);
-
-        script = document.createElement("script");
-        script.src = "js/custom.js";
-        script.async = true;
-        document.body.appendChild(script);
-
     }, []);
 
     
