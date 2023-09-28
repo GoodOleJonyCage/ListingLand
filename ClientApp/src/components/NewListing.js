@@ -589,7 +589,7 @@ export const NewListing = () => {
 
         const PropertyList = () => {
 
-            const [listings, setlistings] = useState([]);
+            const [listings, setlistings] = useState(null);
 
             const loadData = async () => {
 
@@ -607,6 +607,7 @@ export const NewListing = () => {
                 <section id="agent-2-peperty" className="my-pro padding">
                     <div className=" list-t-border">
                         {
+                            listings === null ? <Loading></Loading> : 
                             listings.map((listing, index) => {
                                 return <div key={index} className="row bg-hover">
                                     <div className="my-pro-list">
